@@ -8,11 +8,11 @@ FastClick.attach(document.body)
 import VueTouch from './plugins/touchEvent'
 Vue.use(VueTouch)
 
-import axios from 'axios'
 // import md5 from './utils/md5'
-import cookie from './utils/cookie'
-
+// import cookie from './utils/cookie'
 import config from './configs'
+
+import { initLocalStorage } from './api'
 
 var formData = new Vue({
   el: '#form-data',
@@ -22,11 +22,11 @@ var formData = new Vue({
     password: '',
     errorMsg: ''
   },
-  mounted () {
+  mounted() {
     this.$el.style.display = ""
   },
   methods: {
-    login () {
+    login() {
       if (this.account === '') {
         this.errorMsg = '帐号不能为空'
         return
@@ -38,34 +38,13 @@ var formData = new Vue({
         return
       }
       this.errorMsg = ''
-      axios({
-        url: `${config.backgroundUrl}/xjxy/api/getIMToken`,
-        method: 'post',
-        headers: {
-          'appkey': config.appkey,
-          'content-type': 'application/json',
-        },
-        data: {
-          'loginName': this.account.toLowerCase()
-        }
-      }).then(res => {
-        let data = res.data
-        if (data.errCode === '0') {
-          let sdktoken = data.data;
-          // 服务端帐号均为小写
-          cookie.setCookie('uid', this.account.toLowerCase())
-          cookie.setCookie('sdktoken', sdktoken)
-          location.href = config.homeUrl
-        } else {
-          alert(data.message)
-        }
-        // this.$store.dispatch('hideLoading')
-      }).catch(err => {
-        alert(err)
-        // this.$store.dispatch('hideLoading')
-      })
+      console.log(this.account.toLowerCase());
+      initLocalStorage(this.account.toLowerCase(), result => {
+        if (result)
+          location.href = config.homeUrl;
+      });
     },
-    regist () {
+    regist() {
       location.href = config.registUrl
     }
   },

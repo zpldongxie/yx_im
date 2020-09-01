@@ -1,6 +1,9 @@
 // Action 提交的是 mutation，而不是直接变更状态。
 // Action 可以包含任意异步操作。
-import cookie from '../../utils/cookie'
+// import url from 'url'
+// import cookie from '../../utils/cookie'
+import storage from '../../utils/localStorage'
+import { initLocalStorage } from '../../api'
 import pageUtil from '../../utils/page'
 
 /* 导出actions方法 */
@@ -21,16 +24,42 @@ function connectNim ({state, commit, dispatch}, obj) {
   let {force} = Object.assign({}, obj)
   // 操作为内容页刷新页面，此时无nim实例
   if (!state.nim || force) {
+    const currentURL = new URL(location.href);
+    const currentId = currentURL.searchParams.get('loginName');
     let loginInfo = {
-      uid: cookie.readCookie('uid'),
-      sdktoken: cookie.readCookie('sdktoken'),
+      uid: storage.get('uid'),
+      sdktoken: storage.get('sdktoken'),
     }
-    if (!loginInfo.uid) {
-      // 无cookie，直接跳转登录页
-      pageUtil.turnPage('无历史登录记录，请重新登录', 'login')
+    if (currentId) {
+      console.log('currentId: ', currentId);
+      // 参数里有指定用户
+      if (!loginInfo.uid || loginInfo.uid !== currentId) {
+        initLocalStorage(currentId, result => {
+          dispatch('hideLoading')
+          if(result) {
+            dispatch('initNimSDK', {
+              uid: currentId,
+              sdktoken: storage.get('sdktoken'),
+            })
+          } else {
+            // pageUtil.turnPage('请重新登录', 'login')
+            window.parent.postMessage('backtoHomepage', '*')
+          }
+        })
+      } else {
+        dispatch('initNimSDK', loginInfo)
+      }
     } else {
-      // 有cookie，重新登录
-      dispatch('initNimSDK', loginInfo)
+      dispatch('hideLoading')
+      // 参数里无指定用户
+      if (!loginInfo.uid) {
+        // 无cookie，直接跳转登录页
+        // pageUtil.turnPage('无历史登录记录，请重新登录', 'login')
+        window.parent.postMessage('backtoHomepage', '*')
+      } else {
+        // 有cookie，重新登录
+        dispatch('initNimSDK', loginInfo)
+      }
     }
   }
 }
@@ -39,7 +68,7 @@ function connectChatroom ({state, commit, dispatch}, obj) {
   let {chatroomId} = Object.assign({}, obj)
   const nim = state.nim
   if (nim) {
-    dispatch('showLoading')
+    // dispatch('showLoading')
     nim.getChatroomAddress({
       chatroomId,
       done: function getChatroomAddressDone (error, obj) {
@@ -83,8 +112,10 @@ export default {
 
   // 用户触发的登出逻辑
   logout ({ state, commit }) {
-    cookie.delCookie('uid')
-    cookie.delCookie('sdktoken')
+    storage.del('uid')
+    storage.del('sdktoken')
+    // cookie.delCookie('uid')
+    // cookie.delCookie('sdktoken')
     if (state.nim) {
       state.nim.disconnect()
     }

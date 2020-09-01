@@ -22,7 +22,7 @@ export function initNimSDK ({ state, commit, dispatch }, loginInfo) {
   if (state.nim) {
     state.nim.disconnect()
   }
-  dispatch('showLoading')
+  // dispatch('showLoading')
   // 初始化SDK
   window.nim = state.nim = SDK.NIM.getInstance({
     debug: true,

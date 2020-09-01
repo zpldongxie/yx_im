@@ -158,7 +158,7 @@ export default {
 }
 </script>
 
-<style type="text/css">
+<style type="text/css" lang=less>
   .p-session {
     .vux-cell-primary {
       max-width: 70%;
