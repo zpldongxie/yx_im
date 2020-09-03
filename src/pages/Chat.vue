@@ -1,7 +1,7 @@
 <template>
   <div class="g-inherit m-article">
     <x-header class="m-tab" :left-options="leftBtnOptions" @on-click-back = "onClickBack">
-      <h1 class="m-tab-top" @click="enterNameCard">{{sessionName}}</h1>
+      <h1 class="m-tab-top" v-bind:style="{lineHeight: '40px'}" @click="enterNameCard">{{sessionName}}</h1>
       <a slot="left"></a>
       <div class="m-tab-right" slot="right">
         <span class='icon-history' @click='onHistoryClick'></span>
@@ -212,19 +212,20 @@ export default {
 .g-window .m-tab .m-tab-right{
   width: 5rem;
   right: -1rem;
+  top: -0.2rem;
+
 }
 .m-tab-right {
   display: flex;
   justify-content: flex-end;
-
   .icon-history, .icon-team {
     display: inline-block;
     margin-right: .8rem;
-    width: 1.7rem;
-    height: 1.7rem;
+    width: 1.6rem;
+    height: 1.6rem;
     background: url(http://yx-web.nos.netease.com/webdoc/h5/im/icons.png);
-    background-size: 20rem;
-    background-position: -5.8rem -11.3rem;
+    background-size: 17rem;
+    background-position: -4.8rem -9.5rem;
   }
   .icon-team{
     background-position: -7.9rem -11.3rem;

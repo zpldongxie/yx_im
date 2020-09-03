@@ -28,23 +28,26 @@
     .weui-switch:checked, .weui-switch-cp__input:checked ~ .weui-switch-cp__box {
       background-color: $color_nav_active_font;
       border-color: $color_nav_active_font;
+      
     }
   }
   .u-card {
-    margin: 1rem 0;
+    .weui-switch, .weui-switch-cp__box{
+      width: 39px;
+      height: 19px;
+    }
     .weui-cells {
       background-color: #fff;
     }
     .icon {
       display: inline-block;
       margin-right: 0.8rem;
-      width: 2rem;
-      height: 2rem;
+      width: 3rem;
+      height: 3rem;
     }
   }
   .u-search {
-    margin: 0;
-    margin-bottom: 2rem;
+    margin: 4rem 0px;
     height: 2rem;
     .weui-cells:after, .weui-cells:before {
       border-color: #f0f0f0;

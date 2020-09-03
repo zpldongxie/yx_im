@@ -1,6 +1,6 @@
 <template>
   <div class="g-window">
-    <nav-bar v-show="showNav"></nav-bar>
+    <!-- <nav-bar v-show="showNav"></nav-bar> -->
     <!-- 切页动画设置 -->
     <transition :name="transitionName">
       <router-view></router-view>
@@ -86,7 +86,7 @@ export default {
     this.$store.dispatch('updateRefreshState')
   },
   components: {
-    NavBar,
+    // NavBar,
     ViewBox,
     Loading,
     FullscreenImg

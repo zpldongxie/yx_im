@@ -4,9 +4,32 @@
 
 /* 外面嵌套g-window 为了覆盖weui默认样式 */
 .g-window {
+  .news-top {
+    position: relative;
+    width: 100%;
+    height: 2.7rem;
+    line-height: 2.7rem;
+    background-color: #14cfbd;
+    padding: 1rem 0px 0px 1rem;
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    z-index: 9999;
+    >div:nth-child(2){
+      position: absolute;
+      /* background: url('/h5/img/im/contacts.png') no-repeat center; */
+      background-size: cover;
+      padding: .5rem;
+      /* height: 2.7rem;
+      width: 32px; */
+      right: 2rem;
+      z-index: 9999;
+    }
+
+}
   .m-main, .m-album, .m-article, .m-room {
-    position: absolute;
-    padding-top: $height_nav;
+    position: relative;
+    /* padding-top: 3.7rem; */
     display: block;
     box-sizing: border-box;
     top: 0;
@@ -25,7 +48,7 @@
   }
   /* 主背景皮肤 */
   .m-main {
-    background: $theme_background;
+    /* background: $theme_background; */
   }
   .m-article {
     background: $theme_background;
@@ -108,6 +131,7 @@
       }
     }
     .u-card {
+      margin: 0;
       .weui-cells {
         background-color: inherit;
       }
@@ -116,15 +140,26 @@
 
   /* 按钮tab切换 */
   .m-tab {
-    color: $color_nav_active_font;
-    background-color: $color_nav_active_background;
+    /* color: $color_nav_active_font; */
+    background-color: $color_nav_active_font;
     .vux-header-left {
       .left-arrow {
         &::before {
-          border-color: $color_nav_active_font;
+          border-color: #fff;
+          top: 8px;
+          width: 10px;
+          height: 10px;
         }
       }
     }
+  }
+  .vux-button-group > a.vux-button-tab-item-first:after{
+    border: 1px solid #FFF;
+  }
+  .vux-button-group > a.vux-button-tab-item-last:after{
+    border-right: 1px solid #FFF;
+    border-top: 1px solid #FFF;
+    border-bottom: 1px solid #FFF;
   }
   .m-tab-top  {
     .u-tab-top {
@@ -172,21 +207,28 @@
     top: 0;
     left: 0;
     margin: 0;
-    padding: 10px 0;
+    padding: 0;
     width: 100%;
-    height: $height_tab;
+    height: 3.7rem;
     overflow: hidden;
     z-index: 3;
     .vux-header-left, .vux-header-right {
-      top: 20px;
+      top: 26px;
     }
     .m-tab-top {
       position: relative;
       padding: 0;
-      font-size: 1.3rem;
-
+      font-size: 16px;
+      line-height: 0px;
       &.vux-button-group {
-        margin: 4px auto;
+        a{
+          font-size: 14px;
+          margin: 4px 0;
+          padding: 0 6px;
+          border: none;
+          /* line-height: 22px; */
+        }
+        /* margin: 4px auto; */
       }
     }
     .m-tab-right {
@@ -248,6 +290,7 @@
       position: relative;
       display: block;
       box-sizing: border-box;
+      margin-top: 3.7rem;
       padding: 1rem 2%;
       width: 100%;
       -webkit-overflow-scrolling: touch;
@@ -374,7 +417,7 @@
       line-height: 1.6rem;
       padding: 0.1rem 0.2rem;
       border-radius: 0.2rem;
-      font-size: 0.9rem;
+      font-size: 14px;
       color: $color_button_font;
       background-color: $color_chat_editor_button;
       text-align: center;

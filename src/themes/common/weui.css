@@ -12,13 +12,14 @@
     opacity: 0.3;
   }
   .weui-cells {
-    margin-top: 0;
+    margin-top: -1;
     font-size: inherit;
     background-color: transparent;
   }
   .weui-cell {
-    font-size: 1.08rem;
+    font-size: 14px;
     padding: 0.5rem 0.7rem;
+    line-height: 2rem;
     .vux-label-desc {
       font-size: 0.8rem;
       color: #999;
@@ -29,7 +30,7 @@
   }
   /* 按钮组 */
   .weui-btn {
-    font-size: 1rem;
+    font-size: 15px;
     &:after {
       border: none;
     }
@@ -59,6 +60,14 @@
     background-color: inherit;
     border-color: inherit;
   }
+  .weui-switch:after, .weui-switch-cp__box:after {
+    width: 17px;
+    height: 17px;
+  }
+  .weui-switch:before, .weui-switch-cp__box:before {
+    width: 37px;
+    height: 17px;
+  }
   /* 导航元件 */
   .vux-tab {
     .vux-tab-item {
@@ -74,6 +83,16 @@
     }
   }
   .vux-button-group {
+     a{
+        .vux-button-tab-item-first:after{
+          border: none;
+        }
+        .vux-button-tab-item-last:after{
+          border-right: none;
+          border-top: none;
+          border-bottom: none;
+        }
+      }
     & > a.vux-button-group-current, & > a.hover, & > a:active {
       background-color: inherit;
     }
@@ -81,7 +100,10 @@
   .vux-header {
     .vux-header-title, h1 {
       margin: 0 20%;
-      color: inherit;
+      /* color: inherit; */
+      height: 3.6rem;
+      margin-top: 1rem;
+      line-height: 45px;
     }
     .vux-header-left, .vux-header-right {
       color: inherit;
@@ -95,6 +117,7 @@
     color: inherit;
   }
   .weui-search-bar {
+    font-size: 14px;
     background-color: transparent;
   }
   .weui-icon-search {
@@ -105,8 +128,9 @@
   }
   .weui-search-bar__box {
     .weui-search-bar__input, .weui-icon-search {
-      line-height: 2rem;
-      font-size: 1.08rem;
+      line-height: 1.8rem;
+      font-size: 14px;
+      left: 5px;
     }
   }
   .vux-label-desc {

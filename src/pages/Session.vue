@@ -1,15 +1,22 @@
 <template>
   <div class="g-inherit m-main p-session">
+    <div class="news-top">
+      <div> 消息 </div>
+      <div v-on:click="mailList"><img height="27px" :src="contactsIcon"></div>
+      <!-- <div>  
+        <router-link :to="{ name: 'contacts' }"></router-link>
+      </div> -->
+    </div>
     <group class="u-list">
       <cell class="u-list-item" title="消息中心" @click.native="enterSysMsgs">
         <img class="icon" slot="icon" width="24" :src="noticeIcon">
         <span v-show="sysMsgUnread > 0" class="u-unread">{{sysMsgUnread}}</span>
       </cell>
-      <cell class="u-list-item" title="我的手机" @click.native="enterMyChat">
+      <!-- <cell class="u-list-item" title="我的手机" @click.native="enterMyChat">
         <img class="icon" slot="icon" width="24" :src="myPhoneIcon">
-      </cell>
+      </cell> -->
       <cell
-        v-for="(session, index) in sessionlist"
+        v-for="(session) in sessionlist"
         class="u-list-item"
         :title="session.name"
         :inline-desc="session.lastMsgShow"
@@ -30,6 +37,7 @@
           ></span>
       </cell>
     </group>
+    
   </div>
 </template>
 
@@ -45,7 +53,8 @@ export default {
       noticeIcon: config.noticeIcon,
       myPhoneIcon: config.myPhoneIcon,
       myGroupIcon: config.defaultGroupIcon,
-      myAdvancedIcon: config.defaultAdvancedIcon
+      myAdvancedIcon: config.defaultAdvancedIcon,
+      contactsIcon: config.contactsIcon
     }
   },
   computed: {
@@ -117,6 +126,9 @@ export default {
     }
   },
   methods: {
+     mailList(){
+       location.href = '#/contacts'
+    },
     enterSysMsgs () {
       if (this.hideDelBtn())
         return

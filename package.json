@@ -1,5 +1,5 @@
 {
-  "name": "xijingIM",
+  "name": "xijing-im",
   "version": "1.0.0",
   "description": "Web SDK Html5 Demo",
   "main": "index.js",
@@ -22,7 +22,7 @@
     "prodend": "cross-env NODE_ENV=production run-s -lns clean buildend",
     "pack": " run-s -lns pack:build pack:copy",
     "pack:build": "npm run prodend",
-    "pack:copy": "rimraf h5 && mkdir h5 && cp index.html ./h5 && cp login.html ./h5 && cp regist.html ./h5 && cp -rf dist ./h5"
+    "pack:copy": "rimraf h5 && mkdir h5 && cp index.html ./h5 && cp login.html ./h5 && cp regist.html ./h5 && cp -rf dist ./h5 && cp -rf img ./h5"
   },
   "keywords": [
     "frontend",

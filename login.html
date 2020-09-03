@@ -4,15 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>WEB DEMO</title>
+    <title>西京学院IM</title>
     <link rel="stylesheet" href="dist/css/theme.css">
   </head>
   <body>
     <div class="g-window">
       <div class="g-inherit m-album">
         <div id="form-data" class="g-center m-login" style="display:none">
-          <div class="cells">
-            <img class="logo" :src="logo">
+          <div class="cells" v-bind:style="{
+            textAlign: 'center',
+            fontSize: '2rem',
+            marginBottom: '2rem',
+            color: '#14cfbd',
+            border: '1px solid',
+            borderRadius: '10px',
+            padding: '.5rem',
+            width: '12rem'
+          }">
+            <!-- <img class="logo" :src="logo"> -->
+            西京学院IM
           </div>
           <div class="cells">
             <div class="cell">
@@ -29,7 +39,7 @@
           </div>
           <div class="cells">
             <button type="button" class="btn btn-login" @click="login">登录</button>
-            <button type="button" class="btn btn-regist" @click="regist">注册</button>
+            <!-- <button type="button" class="btn btn-regist" @click="regist">注册</button> -->
           </div>
         </div>
       </div>

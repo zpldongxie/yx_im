@@ -1,7 +1,7 @@
 <template>
   <div class="g-inherit m-article p-chat-history">
     <x-header class="m-tab" :left-options="leftBtnOptions" @on-click-back = "onClickBack">
-      <h1 class="m-tab-top">{{sessionName}}</h1>
+      <h1 class="m-tab-top" v-bind:style="{lineHeight: '40px'}" >{{sessionName}}</h1>
       <a slot="left"></a>
       <!-- <group class="m-tab-right" slot="right">
         <datetime v-model="selectedDate" format="YYYY-MM-DD HH:mm" @on-change="selectDate" title="">历史日期</datetime>

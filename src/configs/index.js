@@ -1,11 +1,12 @@
+const rootUrl = '/h5';
 let config = {
   // sdk: 'NIM_Web_SDK_v5.8.0',
   // sdk: 'NIM_Web_SDK_v6.1.0',
   sdk: 'NIM_Web_SDK_v7.8.1',
   // 用户自定义的登录注册地址
-  loginUrl: '/h5/login.html',
-  registUrl: '/h5/regist.html',
-  homeUrl: '/h5/index.html#/session',
+  loginUrl: `${rootUrl}/login.html`,
+  registUrl: `${rootUrl}/regist.html`,
+  homeUrl: `${rootUrl}/index.html#/session`,
 
   // 资源路径根目录，为了方便用户部署在二级以上URL路径上
   resourceUrl: 'http://yx-web.nos.netease.com/webdoc/h5',
@@ -21,6 +22,12 @@ let config = {
   noticeIcon: 'http://yx-web.nos.netease.com/webdoc/h5/im/notice-icon.png',
   // 我的手机图标
   myPhoneIcon: 'http://yx-web.nos.netease.com/webdoc/h5/im/my-phone.png',
+  // 通讯录图标
+  contactsIcon: `${rootUrl}/img/im/contacts.png`,
+  // 消息图标
+  sessionIcon: `${rootUrl}/img/im/session.png`,
+  // 加号图标
+  addIcon: `${rootUrl}/img/im/add.png`,
   // 本地消息显示数量，会影响性能
   localMsglimit: 36,
   useDb: false
