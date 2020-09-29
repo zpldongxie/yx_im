@@ -43,13 +43,13 @@ export default {
 <style scoped>
   .p-teamlist {
     .m-list {
-      padding-top: 3.7rem;
+      padding-top: 2rem;
     }
     .empty-hint{
       position: absolute;
       left: 0;
       right: 0;
-      top: 5rem;  
+      top: 10rem;  
       margin: auto;
       text-align: center;
     }

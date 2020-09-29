@@ -131,7 +131,7 @@ export default {
         if (msg.scene === 'p2p') {
           let content = JSON.parse(msg.content)
           msg.showText = `${content.content}`
-          msg.avatar = this.userInfos[msg.from].avatar
+          msg.avatar = typeof this.userInfos[msg.from] !== 'undefined' ? this.userInfos[msg.from].avatar : 'admin-tz'
           return msg
         }
         return false
@@ -218,8 +218,9 @@ export default {
 }
 </script>
 
-<style type="text/css">
+<style type="text/css" lang=less>
   .p-sysmsgs {
+    padding-top: 50px;
     .u-list {
       height: 100%;
       overflow-y: scroll;
@@ -277,7 +278,7 @@ export default {
       position: absolute;
       left: 0;
       right: 0;
-      top: 5rem;  
+      top: 10rem;  
       margin: auto;
       text-align: center;
     }

@@ -15,7 +15,10 @@
     </group>
     <div class="m-chat-editor-main" :class="{robot:isRobot}">
       <span class="u-editor-input">
-        <textarea v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></textarea>
+        <group>
+          <x-input v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></x-input>
+        </group>
+        <!-- <textarea v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></textarea> -->
         <i v-if="supportTouch && !sendTxt" class="u-btn-record" :class="{'recording':recording, 'disabled': recordDisable}" @touchstart.prevent='toRecord' v-touch:swipeup='cancelRecord' @touchend.prevent='sendRecordMsg'>
           <b v-if="recording">松开结束</b>
           <b v-else>按下说话</b>
@@ -41,10 +44,10 @@
           <i class="u-icon-img"><img :src="icon2"></i>
           <input type="file" ref="fileToSent" @change="sendFileMsg">
         </span>
-        <span v-if="!isRobot && !advancedTeam" class="u-editor-icon" @click.stop="sendPlayMsg">
+        <!-- <span v-if="!isRobot && !advancedTeam" class="u-editor-icon" @click.stop="sendPlayMsg">
           <i class="u-icon-img"><img :src="icon3"></i>
-        </span>
-        <span v-if='advancedTeam' class="u-editor-send u-editor-receipt" @click="turnToMsgReceipt">回执</span>
+        </span> -->
+        <!-- <span v-if='advancedTeam' class="u-editor-send u-editor-receipt" @click="turnToMsgReceipt">回执</span> -->
         <span class="u-editor-send" @click="sendTextMsg">发 送</span>
       </span>
     </div>
@@ -130,7 +133,8 @@ export default {
       $recordTime: null,
       recordTimeout: '',
       recorder: null,
-      audioContext: null
+      audioContext: null,
+      isShow: true
     }
 
     try {
@@ -516,7 +520,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang=less>
   .robot.m-chat-editor-main {
     /*.u-editor-input {
       padding-right: 4.5rem;

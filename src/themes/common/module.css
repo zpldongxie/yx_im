@@ -7,10 +7,10 @@
   .news-top {
     position: relative;
     width: 100%;
-    height: 2.7rem;
-    line-height: 2.7rem;
-    background-color: #14cfbd;
-    padding: 1rem 0px 0px 1rem;
+    height: 50px;
+    line-height: 50px;
+    background-color: #04c4c4;
+    padding: 0rem 0px 0px 1rem;
     color: #fff;
     font-size: 18px;
     display: flex;
@@ -19,7 +19,8 @@
       position: absolute;
       /* background: url('/h5/img/im/contacts.png') no-repeat center; */
       background-size: cover;
-      padding: .5rem;
+      /* padding: .5rem; */
+      padding-top: 0.7rem;
       /* height: 2.7rem;
       width: 32px; */
       right: 2rem;
@@ -163,12 +164,13 @@
   }
   .m-tab-top  {
     .u-tab-top {
-      color: $color_nav_font;
+      color: $color_nav_background;
       border: 1px solid $color_nav_active_font;
+      background-color: #04c4c4;
       /* 选中状态 */
       &.vux-button-group-current {
-        color: $color_nav_background;
-        background-color: $color_nav_active_font;
+        color: #04c4c4;
+        background-color: $color_nav_background;
       }
     }
   }
@@ -192,7 +194,7 @@
     position: absolute;
     display: block;
     box-sizing: border-box;
-    top: 0;
+    top: 20;
     bottom: 0;
     padding: 0;
     width: 100%;
@@ -209,18 +211,20 @@
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 3.7rem;
+    /* height: 50px; */
     overflow: hidden;
     z-index: 3;
     .vux-header-left, .vux-header-right {
-      top: 26px;
+      top: 20px;
     }
     .m-tab-top {
       position: relative;
       padding: 0;
       font-size: 16px;
-      line-height: 0px;
+      
+      /* line-height: 0px; */
       &.vux-button-group {
+        margin-top: 8px;
         a{
           font-size: 14px;
           margin: 4px 0;
@@ -228,7 +232,6 @@
           border: none;
           /* line-height: 22px; */
         }
-        /* margin: 4px auto; */
       }
     }
     .m-tab-right {
@@ -307,6 +310,16 @@
     background-color: $color_chat_editor_background;
   }
   /* 聊天按钮组件 */
+  .vux-x-input{
+    background-color: #e8e8e8;
+    border-radius: 0.4rem;
+  }
+  .weui-cells:before {
+    border: 0;
+  }
+  .weui-cells:after {
+    border: 0;
+  }
   .m-chat-editor-main {
     position: relative;
     display: block;
@@ -314,13 +327,15 @@
     padding: 0;
     height: 100%;
     width: 100%;
+    background-color: #FFF;
     .u-editor-input {
       position: relative;
       display: inline-block;
       box-sizing: border-box;
       margin: 0;
-      padding: 0.2rem;
-      padding-right: 13rem;
+      padding: 0.7rem;
+      padding-right: 11rem;
+      padding-left: 15px;
       width: 100%;
       height: $height_editor;
       textarea {
@@ -332,7 +347,8 @@
         width: 100%;
         height: 100%;
         text-align: left;
-        border: 1px solid #ccc;
+        border: 1px solid #FFF;
+        background-color: #e8e8e8;
         border-radius: 0.4rem;
       }
       i {
@@ -342,14 +358,14 @@
         position: relative;
         display: inline-block;
         box-sizing: border-box;
-        margin: 1rem 0 0;
+        /* margin: 0.5rem 0 0; */
         width: 100%;
-        height: 1.9rem;
-        line-height: 1.8rem;
+        height: 40px;
+        line-height: 40px;
         border: 1px solid #ccc;
         border-radius: 0.3rem;
         text-align: center;
-        font-size: 1rem;
+        font-size: 0.96rem;
         &.recording {
           background: #ccc;
         }
@@ -385,7 +401,7 @@
       display: inline-block;
       right: 0;
       top: 0;
-      width: 13rem;
+      width: 168px;
       height: $height_editor;
       .u-editor-icon {
         position: relative;

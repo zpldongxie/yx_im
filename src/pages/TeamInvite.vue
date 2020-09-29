@@ -18,7 +18,7 @@
         <img class='u-circle' v-for='friend in selected' :key='friend.account' width="30" height="30" :src='userInfos[friend.account].avatar' @click='unSelect(friend)'>
         <img width="30" height="30" src='http://yx-web.nos.netease.com/webdoc/h5/im/team_invite_dot_avatar.png'>
       </div>
-      <x-button class='btn' type="primary" :mini='true' action-type="button" @click.native='onNext'>{{`确认(${selected.length})`}}</x-button>
+      <x-button class='btn' :mini='true' action-type="button" @click.native='onNext'>{{`确认(${selected.length})`}}</x-button>
     </div>
     <action-sheet v-model="showActionSheet" :menus="menus" @on-click-menu="onActionClick" show-cancel></action-sheet>
   </div>
@@ -219,7 +219,8 @@ export default {
     .m-selected {
       display: inherit;
       height: 5rem;
-      background-color: black;
+      background-color: #FFF;
+      border-top: 1px solid #e7e7e7;
       align-items: center;
       justify-content: space-between;
 

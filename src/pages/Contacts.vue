@@ -48,12 +48,11 @@
           <img class="icon u-circle" slot="icon" width="20" :src="userInfos[friend.account].avatar">
         </cell>
       </group>
-    <div class="plus" @click="onShowClick(isShow)"><img height="30px" :src="addIcon"></div>
+    <div class="plus" @click="onShowClick(isShow)"><img height="35px" :src="addIcon"></div>
     <div class="plusContent" v-show="isShow"> 
       <a href="#/searchUser/0">
         添加好友\群
       </a>
-      <hr/>
       <a href='#/teaminvite/0'>
       创建组\群
       </a>
@@ -130,8 +129,8 @@ export default {
     .plus{
       position: absolute;
       background: #fff;
-      width: 30px;
-      height: 30px;
+      width: 35px;
+      height: 35px;
       right: 15px;
       border-radius: 50%;
       z-index: 10000;
@@ -156,12 +155,15 @@ export default {
       a{
         font-size: 14px;
       }
+      a:first-child{
+        border-bottom: 1px solid #ddd;
+      }
     }
     .add-friend {
       background-color: #fff;
     }
     .m-list {
-      padding-top: 3.7rem;
+      padding-top: 2.7rem;
       background-color: #f1f1f1;
     }
     .u-search-box-wrap {

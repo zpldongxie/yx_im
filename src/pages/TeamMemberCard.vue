@@ -191,6 +191,7 @@ export default {
     margin: 2rem auto;
     width: 100%;
     text-align: center;
+    margin-top: 4rem;
   }
   .u-btn{
     width: 80%;

@@ -1,7 +1,7 @@
 <template>
   <div class="g-inherit m-article">
     <x-header class="m-tab" :left-options="leftBtnOptions" @on-click-back = "onClickBack">
-      <h1 class="m-tab-top" v-bind:style="{lineHeight: '40px'}" @click="enterNameCard">{{sessionName}}</h1>
+      <h1 class="m-tab-top" @click="enterNameCard">{{sessionName}}</h1>
       <a slot="left"></a>
       <div class="m-tab-right" slot="right">
         <span class='icon-history' @click='onHistoryClick'></span>
@@ -208,11 +208,11 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang=less>
 .g-window .m-tab .m-tab-right{
   width: 5rem;
-  right: -1rem;
-  top: -0.2rem;
+  /* right: -1rem; */
+  top: -0.4rem;
 
 }
 .m-tab-right {
@@ -220,15 +220,17 @@ export default {
   justify-content: flex-end;
   .icon-history, .icon-team {
     display: inline-block;
-    margin-right: .8rem;
+    /* margin-right: .8rem; */
     width: 1.6rem;
     height: 1.6rem;
-    background: url(http://yx-web.nos.netease.com/webdoc/h5/im/icons.png);
-    background-size: 17rem;
-    background-position: -4.8rem -9.5rem;
+    background: url('/h5/img/im/message.png') no-repeat center;
+    background-size: 33px;
+    /* background-position: -4.8rem -9.5rem; */
   }
   .icon-team{
-    background-position: -7.9rem -11.3rem;
+    background: url('/h5/img/im/stting.png') no-repeat center;
+    background-size: 33px;
+    margin-left: 10px;
   }
 }
 .invalidHint {
@@ -247,5 +249,6 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* margin-top: 1rem; */
 }
 </style>

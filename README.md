@@ -1,6 +1,52 @@
 # yx_im
 网易云信IM前端web实现
 
+## 打包步骤
+- linux 下 npm run pack
+- windows 下 npm run pack_win
+
+## 实现了index.html页接收参数并自动查询token进行登录，此模式只适合已经登录认证之后直接使用IM的情况
+src\store\actions\index.js
+```js
+    const currentURL = new URL(location.href);
+    const currentId = currentURL.searchParams.get('loginName');
+    let loginInfo = {
+      uid: storage.get('uid'),
+      sdktoken: storage.get('sdktoken'),
+    }
+    if (currentId) {
+      console.log('currentId: ', currentId);
+      // 参数里有指定用户
+      if (!loginInfo.uid || loginInfo.uid !== currentId) {
+        initLocalStorage(currentId, result => {
+          dispatch('hideLoading')
+          if(result) {
+            dispatch('initNimSDK', {
+              uid: currentId,
+              sdktoken: storage.get('sdktoken'),
+            })
+          } else {
+            // pageUtil.turnPage('请重新登录', 'login')
+            window.parent.postMessage('backtoHomepage', '*')
+          }
+        })
+      } else {
+        dispatch('initNimSDK', loginInfo)
+      }
+    } else {
+      dispatch('hideLoading')
+      // 参数里无指定用户
+      if (!loginInfo.uid) {
+        // 无cookie，直接跳转登录页
+        // pageUtil.turnPage('无历史登录记录，请重新登录', 'login')
+        window.parent.postMessage('backtoHomepage', '*')
+      } else {
+        // 有cookie，重新登录
+        dispatch('initNimSDK', loginInfo)
+      }
+    }
+```
+
 # WEB DEMO - alpha (HTML5-VUE版本) 源码导读
 
 ## 介绍

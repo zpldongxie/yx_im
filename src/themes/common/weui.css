@@ -12,7 +12,7 @@
     opacity: 0.3;
   }
   .weui-cells {
-    margin-top: -1;
+    margin-top: -2;
     font-size: inherit;
     background-color: transparent;
   }
@@ -36,7 +36,8 @@
     }
   }
   .weui-btn_default {
-    color: $color_button_primary;
+    background-color: #04c4c4;
+    color: #fff;
   }
   .weui-btn_transparent {
     color: $color_white;
@@ -102,11 +103,11 @@
       margin: 0 20%;
       /* color: inherit; */
       height: 3.6rem;
-      margin-top: 1rem;
-      line-height: 45px;
+      /* margin-top: 0.5rem; */
+      line-height: 3.6rem;
     }
     .vux-header-left, .vux-header-right {
-      color: inherit;
+      color: #FFF;
       a, button {
         color: inherit;
       }

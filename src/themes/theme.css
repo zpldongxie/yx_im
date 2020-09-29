@@ -8,11 +8,11 @@ $theme_background: #f9fcff;
 $color_nav_background: #fff;
 $color_nav_font: #333;
 $color_nav_active_background: #fff;
-$color_nav_active_font: #14cfbd;
+$color_nav_active_font: #04c4c4;
 
 /* 输入框颜色 */
 $color_chat_editor_background: #e5f4ff;
-$color_chat_editor_button: #14cfbd;
+$color_chat_editor_button: #04c4c4;
 
 /* 基础按钮颜色 */
 $color_base_font: #333;
@@ -20,7 +20,7 @@ $color_error: #ed0e0e;
 $color_tip_background: #e0e0e0;
 $color_tip_font: #ccc;
 $color_button_font: #fff;
-$color_button_primary: #14cfbd;
+$color_button_primary: #04c4c4;
 $color_button_warn: #f04d64;
 
 $color_input_dark: #333;
@@ -30,7 +30,7 @@ $color_input_light: #999;
 $color_white: #fff;
 
 /* 顶部导航高度 */
-$height_nav: 2.7rem;
+$height_nav: 3.6rem;
 $height_tab: 2.6rem;
 $height_room_banner: 12rem;
 $height_room_tabs: 3rem;

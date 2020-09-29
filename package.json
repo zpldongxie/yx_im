@@ -21,8 +21,10 @@
     "prod": "cross-env NODE_ENV=production run-s -lns clean build",
     "prodend": "cross-env NODE_ENV=production run-s -lns clean buildend",
     "pack": " run-s -lns pack:build pack:copy",
+    "pack_win": " run-s -lns pack:build pack:copy_win",
     "pack:build": "npm run prodend",
-    "pack:copy": "rimraf h5 && mkdir h5 && cp index.html ./h5 && cp login.html ./h5 && cp regist.html ./h5 && cp -rf dist ./h5 && cp -rf img ./h5"
+    "pack:copy": "rimraf h5 && mkdir h5 && cp index.html ./h5 && cp login.html ./h5 && cp regist.html ./h5 && cp -rf dist ./h5 && cp -rf img ./h5",
+    "pack:copy_win": "rimraf h5 && mkdir h5 && copy \"index.html\" \"./h5\" && copy \"login.html\" \"./h5\" && copy \"regist.html\" \"./h5\" && xcopy /i/e \"dist\" \"./h5/dist\" && xcopy /i/e \"img\" \"./h5/img\""
   },
   "keywords": [
     "frontend",

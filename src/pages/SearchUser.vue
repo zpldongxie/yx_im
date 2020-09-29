@@ -20,8 +20,8 @@
         <span slot="label">搜索：</span>
       </search>
     </group>
-    <div>
-      <x-button type="primary" action-type="button" @click.native="searchUser">搜索</x-button>
+    <div v-bind:style="'padding: 0 20px'">
+      <x-button action-type="button" @click.native="searchUser">搜索</x-button>
     </div>
     <group class="u-card u-list">
       <cell v-if='searchType === 0'
@@ -46,7 +46,9 @@
       </cell>
     </group>
     <div class="u-card">
-      <h3>{{errMsg}}</h3>
+      <!-- <h3>{{errMsg}}</h3> -->
+      <div v-if='errMsg === 1' class='nodata'></div>
+      <div v-else></div>
     </div>
   </div>
 </template>
@@ -71,7 +73,7 @@ export default {
       searchType: 0, // 用户 0 群 1
       searchText: '',
       searchList: [],
-      errMsg: '',
+      errMsg: 0,
       // 首次加载标志，因为mount和watch会有时序问题，首次加载不显示errMsg
       firstEntry: true,
     }
@@ -79,7 +81,7 @@ export default {
   watch: {
     searchResult (val, oldVal) {
       if ((val.length === 0) && (!this.firstEntry)) {
-        this.errMsg = '无记录'
+        this.errMsg = 1
       } else {
         this.errMsg = ''
       }

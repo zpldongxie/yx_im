@@ -47,7 +47,7 @@
     }
   }
   .u-search {
-    margin: 4rem 0px;
+    margin: 3.7rem 0px;
     height: 2rem;
     .weui-cells:after, .weui-cells:before {
       border-color: #f0f0f0;
@@ -56,6 +56,11 @@
   /* 列表 */
   .u-list {
     width: 100%;
+    /* margin-top: 30px; */
+  }
+  .nodata{
+    background: url('/h5/img/im/nodata.png') no-repeat center;
+    height: 300px;
   }
   .u-list-item {
     min-height: 2rem;

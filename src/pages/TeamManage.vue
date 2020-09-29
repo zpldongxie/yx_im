@@ -222,6 +222,7 @@ export default {
     .m-body {
       overflow-y: scroll;
       width: 100%;
+      padding-top: 50px;
     }
 
     img.avatar{

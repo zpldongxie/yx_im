@@ -39,7 +39,7 @@ html, body, .g-window {
     .router-link-active {
       color: $color_nav_active_font;
       background-color: $color_nav_active_background;
-      border-bottom: 1px solid #14cfbd;
+      border-bottom: 1px solid #04c4c4;
     }
   }
 
