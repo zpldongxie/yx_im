@@ -127,7 +127,7 @@ export default {
          display: none;
     }
     .plus{
-      position: absolute;
+      position: fixed;
       background: #fff;
       width: 35px;
       height: 35px;
@@ -141,7 +141,7 @@ export default {
 
     }
     .plusContent{
-      position: absolute;
+      position: fixed;
       background: #fff;
       width: 80px;
       height: 70px;

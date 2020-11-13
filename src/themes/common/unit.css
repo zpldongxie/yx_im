@@ -26,8 +26,8 @@
   /* 双选切换控件 */
   .u-switch {
     .weui-switch:checked, .weui-switch-cp__input:checked ~ .weui-switch-cp__box {
-      background-color: $color_nav_active_font;
-      border-color: $color_nav_active_font;
+      background-color: $theme_color;
+      border-color: $theme_color;
       
     }
   }
@@ -63,7 +63,7 @@
     height: 300px;
   }
   .u-list-item {
-    min-height: 2rem;
+    min-height: 2.5rem;
     vertical-align: middle;
     .icon {
       display: inline-block;

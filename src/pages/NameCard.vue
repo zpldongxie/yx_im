@@ -144,7 +144,7 @@ export default {
       border-bottom: 1px solid #f1f1f1;
     }
     >div:first-child{
-      color: #04c4c4;
+      color: #01b0a3;
     }
     >div:nth-child(2){
       color: red;
@@ -152,7 +152,7 @@ export default {
   }
   .p-namecard {
     .m-list {
-      padding-top: 2rem;
+      padding-top: 2.4rem;
     }
     .u-bottom {
       margin-top: 15px;

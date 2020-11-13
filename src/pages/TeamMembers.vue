@@ -27,6 +27,6 @@ export default {
 <style scoped>
   .p-members{
     background-color: #e6ebf0;
-    padding-top: 50px;
+    padding-top: 58px;
   }
 </style>

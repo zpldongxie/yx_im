@@ -11,14 +11,17 @@
     <group v-show="isRobotListShown" class="m-chat-emoji m-chat-robot">
       <cell v-for="robot in robotslist" :title="robot.nick" :key="robot.account" @click.native="chooseRobot(robot)">
         <img class="icon u-circle" slot="icon" width="20" height="20" :src="robot.avatar">
-      </cell>
+      </cell> 
     </group>
     <div class="m-chat-editor-main" :class="{robot:isRobot}">
       <span class="u-editor-input">
         <group>
-          <x-input v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></x-input>
+          <!-- <x-input contenteditable="true"  v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></x-input>
+          <x-input v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></x-input> -->
+          
         </group>
-        <!-- <textarea v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></textarea> -->
+        <textarea id="textarea" v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></textarea>
+        <!-- <textarea  v-if="sendTxt" v-model="msgToSent" @focus='onInputFocus'></textarea> -->
         <i v-if="supportTouch && !sendTxt" class="u-btn-record" :class="{'recording':recording, 'disabled': recordDisable}" @touchstart.prevent='toRecord' v-touch:swipeup='cancelRecord' @touchend.prevent='sendRecordMsg'>
           <b v-if="recording">松开结束</b>
           <b v-else>按下说话</b>
@@ -31,12 +34,12 @@
         </i>
       </span>
       <span class="u-editor-icons">
-        <span v-if="sendTxt" class="u-editor-icon" @click.stop="swicthMsgType">
+        <!-- <span v-if="sendTxt" class="u-editor-icon" @click.stop="swicthMsgType">
           <i class="u-icon-img"><img :src="icon5"></i>
         </span>
         <span v-else class="u-editor-icon" @click.stop="swicthMsgType">
           <i class="u-icon-img"><img :src="icon4"></i>
-        </span>
+        </span> -->
         <span v-if="!isRobot" class="u-editor-icon" @click.stop="showEmoji">
           <i class="u-icon-img"><img :src="icon1"></i>
         </span>
@@ -102,6 +105,9 @@ export default {
       this.$store.dispatch('continueRobotMsg', '')
     },
     msgToSent (curVal, oldVal) {
+      var text = document.getElementById("textarea");
+      this.autoTextarea(text); // 调用
+
       if (this.isRobot) {
         return
       }
@@ -163,6 +169,88 @@ export default {
     }
   },
   methods: {
+    //处理textarea自动换行的问题
+    autoTextarea (elem, extra, maxHeight) {
+        extra = extra || 0;
+        var addEvent = function (type, callback) {
+            elem.addEventListener
+              ? elem.addEventListener(type, callback, false)
+              : elem.attachEvent("on" + type, callback);
+          },
+          getStyle = elem.currentStyle
+            ? function (name) {
+                var val = elem.currentStyle[name];
+
+                if (name === "height" && val.search(/px/i) !== 1) {
+                  var rect = elem.getBoundingClientRect();
+
+                  return (
+                    rect.bottom -
+                    rect.top -
+                    parseFloat(getStyle("paddingTop")) -
+                    parseFloat(getStyle("paddingBottom")) +
+                    "px"
+                  );
+                }
+
+                return val;
+              }
+            : function (name) {
+                return getComputedStyle(elem, null)[name];
+              },
+          minHeight = parseFloat(getStyle("height"));
+
+        elem.style.resize = "none";
+
+        var change = function () {
+          var scrollTop,
+            height,
+            padding = 0,
+            style = elem.style;
+
+          if (elem._length === elem.value.length) return;
+
+          elem._length = elem.value.length;
+            padding =
+              parseInt(getStyle("paddingTop")) +
+              parseInt(getStyle("paddingBottom"));
+          scrollTop =
+            document.body.scrollTop || document.documentElement.scrollTop;
+
+          elem.style.height = minHeight + "px";
+
+          if (elem.scrollHeight > minHeight) {
+            if (maxHeight && elem.scrollHeight > maxHeight) {
+              height = maxHeight - padding;
+
+              style.overflowY = "auto";
+            } else {
+              height = elem.scrollHeight - padding;
+
+              style.overflowY = "auto";
+              // style.position = 'relative';
+            }
+
+            style.height = height + extra + "px";
+
+            scrollTop += parseInt(style.height) - elem.currHeight;
+
+            document.body.scrollTop = scrollTop;
+
+            document.documentElement.scrollTop = scrollTop;
+
+            elem.currHeight = parseInt(style.height);
+          }
+        };
+
+        addEvent("propertychange", change);
+
+        addEvent("input", change);
+
+        addEvent("focus", change);
+
+        change();
+      },
     sendTextMsg () {
       if (this.invalid) {
         this.$toast(this.invalidHint)
@@ -537,7 +625,18 @@ export default {
       }
     }
   }
-
+  #textarea {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 100%;
+    font-size: 14px;
+    height: 45px;
+    line-height: 18px;
+    padding: 5px;
+    max-height: 100px;
+  }
   .u-editor-send.u-editor-receipt {
     background-color: #fefefe;
     border: #ccc solid 1px;

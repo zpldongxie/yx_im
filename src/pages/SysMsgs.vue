@@ -95,7 +95,6 @@ export default {
             msg.avatar = this.userInfos[msg.from].avatar
             return false
           case 'applyTeam':
-            console.log('applyTeam', msg)
             msg.showText = msg.from
             msg.avatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar || this.defaultAvatar
             msg.desc = `申请加入群:${this.getTeamName(msg.to)}`
@@ -220,7 +219,7 @@ export default {
 
 <style type="text/css" lang=less>
   .p-sysmsgs {
-    padding-top: 50px;
+    padding-top: 58px;
     .u-list {
       height: 100%;
       overflow-y: scroll;

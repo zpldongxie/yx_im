@@ -12,7 +12,7 @@
     opacity: 0.3;
   }
   .weui-cells {
-    margin-top: -2;
+    margin-top: 0;
     font-size: inherit;
     background-color: transparent;
   }
@@ -20,6 +20,7 @@
     font-size: 14px;
     padding: 0.5rem 0.7rem;
     line-height: 2rem;
+    /* margin-top: 5px; */
     .vux-label-desc {
       font-size: 0.8rem;
       color: #999;
@@ -36,7 +37,7 @@
     }
   }
   .weui-btn_default {
-    background-color: #04c4c4;
+    background-color: $theme_color;
     color: #fff;
   }
   .weui-btn_transparent {
