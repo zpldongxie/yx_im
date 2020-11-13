@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>goNext</title>
+    <script src="./aes.min.js"></script>
+  </head>
+  <body>
+    <script>
+      var hash = window.location.hash ? window.location.hash.substring(1) : null;
+      debugger;
+      if (hash && typeof yspCheckIn !== 'undefined') {
+        console.log('hash', hash);
+        var userInfo = JSON.parse(yspCheckIn.getUserInfo());
+        var myURL = new URL(hash);
+        var host = myURL.origin;
+        var url = myURL.pathname.replace('/fhcloud-client-pc/views/', '');
+        // url = decodeURIComponent(url);
+
+        var uid = userInfo.loginName; // "20060057";
+
+        var ran = randomString(32);
+        
+        var aesCode = encodeURI(encodeURI(aesMinEncrypt(uid + "@" + url, ran.substr(0, 16)) + "." + ran));
+        aesCode = aesCode.replace(/\+/g,'xMl3Jk').replace(/\//g,'Por21Ld').replace(/\=/g,'Ml32'); 
+
+        var next = host + "/fh-system/admin/mobileCheck?uids=" + aesCode;
+        console.log("next", next);
+        // window.open(next)
+        window.location.href = next;
+      } else {
+        window.history.back();
+      }
+
+      //加密
+      function aesMinEncrypt(word, uidAse) {
+        var _word = CryptoJS.enc.Utf8.parse(word),
+          _key = CryptoJS.enc.Utf8.parse(uidAse),
+          _iv = CryptoJS.enc.Utf8.parse(uidAse.toUpperCase());
+        var encrypted = CryptoJS.AES.encrypt(_word, _key, {
+          iv: _iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7,
+        });
+        return encrypted.toString();
+      }
+
+      function randomString(length) {
+        var str =
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var result = "";
+        for (var i = length; i > 0; --i)
+          result += str[Math.floor(Math.random() * str.length)];
+        return result;
+      }
+    </script>
+  </body>
+</html>
