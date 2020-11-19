@@ -32,8 +32,10 @@ function connectNim ({state, commit, dispatch}, obj) {
     if (currentId) {
       console.log('currentId: ', currentId);
       // 参数里有指定用户
-      if (!loginInfo.uid || loginInfo.uid !== currentId) {
+      // if (!loginInfo.uid || loginInfo.uid !== currentId) {
         initLocalStorage(currentId, result => {
+          console.log('--------------------------------');
+          console.log('result', result);
           dispatch('hideLoading')
           if(result) {
             dispatch('initNimSDK', {
@@ -45,9 +47,9 @@ function connectNim ({state, commit, dispatch}, obj) {
             window.parent.postMessage('backtoHomepage', '*')
           }
         })
-      } else {
-        dispatch('initNimSDK', loginInfo)
-      }
+      // } else {
+      //   dispatch('initNimSDK', loginInfo)
+      // }
     } else {
       dispatch('hideLoading')
       // 参数里无指定用户
