@@ -110,7 +110,8 @@ export default {
       } else if(this.advanced || this.showAllMode) {
         return this.members
       } else {
-        return this.members.slice(0, this.hasInvitePermission ? 3 : 4)
+
+        return this.members
       }
     },
     hasInvitePermission() {

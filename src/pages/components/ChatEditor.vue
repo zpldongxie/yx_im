@@ -630,11 +630,11 @@ export default {
     display: block;
     margin: 0 auto;
     overflow: hidden;
-    width: 100%;
+    width: 220px;
     font-size: 14px;
     height: 45px;
     line-height: 18px;
-    padding: 5px;
+    padding: 2px;
     max-height: 100px;
   }
   .u-editor-send.u-editor-receipt {

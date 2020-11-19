@@ -152,7 +152,7 @@ export default {
   }
   .p-namecard {
     .m-list {
-      padding-top: 2.4rem;
+      padding-top: 3.6rem;
     }
     .u-bottom {
       margin-top: 15px;

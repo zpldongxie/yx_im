@@ -48,7 +48,7 @@
           <img class="icon u-circle" slot="icon" width="20" :src="userInfos[friend.account].avatar">
         </cell>
       </group>
-    <div class="plus" @click="onShowClick(isShow)"><img height="35px" :src="addIcon"></div>
+    <div class="plus" @click="onShowClick(isShow)"><img height="28px" :src="addIcon"></div>
     <div class="plusContent" v-show="isShow"> 
       <a href="#/searchUser/0">
         添加好友\群
@@ -138,7 +138,11 @@ export default {
       /* background: url("../../../res/im/add.png") no-repeat center; */
       background-size: cover;
      box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.18);
-
+      img{
+        position: relative;
+        top: 3px;
+        left: 4px;
+      }
     }
     .plusContent{
       position: fixed;
@@ -163,7 +167,7 @@ export default {
       background-color: #fff;
     }
     .m-list {
-      padding-top: 2.7rem;
+      padding-top: 3.1rem;
       background-color: #f1f1f1;
     }
     .u-search-box-wrap {

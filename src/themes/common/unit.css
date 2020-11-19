@@ -25,10 +25,14 @@
   }
   /* 双选切换控件 */
   .u-switch {
+    input{
+      width: 39px;
+      height: 19px;
+    }
     .weui-switch:checked, .weui-switch-cp__input:checked ~ .weui-switch-cp__box {
       background-color: $theme_color;
       border-color: $theme_color;
-      
+    
     }
   }
   .u-card {
