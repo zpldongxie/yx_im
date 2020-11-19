@@ -41,12 +41,14 @@ let appConfig = {
   test: {
     appkey: 'fe416640c8e8a72734219e1847ad2547',
     postUrl: 'https://apptest.netease.im',
-    backgroundUrl: 'http;//59.75.39.25:30081' // 本地后台服务
+    backgroundUrl: 'http;//59.75.39.25:30081', // 本地后台服务
+    managerUrl: 'http://59.75.39.25'  // manager地址，读取用户头像等表态资源时需要使用
   },
   online: {
     appkey: 'a5cd5da7be8831d093e2e56ac22c87e5',
     postUrl: 'https://app.netease.im',
-    backgroundUrl: 'http://59.75.39.25:30081' // 本地后台服务
+    backgroundUrl: 'http://59.75.39.25:30081', // 本地后台服务
+    managerUrl: 'http://59.75.39.25'  // manager地址，读取用户头像等表态资源时需要使用
   }
 }
 

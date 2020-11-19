@@ -4,6 +4,9 @@ import storage from './utils/localStorage'
 import config from './configs'
 
 const getToken = async uid => {
+  console.log('===========');
+  console.log('config.backgroundUrl', config.backgroundUrl);
+  console.log('===========');
   const result = await axios({
     url: `${config.backgroundUrl}/xjxy/api/getIMToken`,
     method: 'post',

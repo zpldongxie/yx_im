@@ -18,6 +18,7 @@
       :type="msg.type"
       v-touch:hold="revocateMsg"
     >
+      <div :class=" msg.link ? 'fromNick' : 'fromNick fromNickRight' ">{{msg.fromNick}}</div>
       <a class="msg-head" v-if="msg.avatar" :href="msg.link">
         <img class="icon u-circle" :src="msg.avatar">
       </a>
@@ -539,5 +540,13 @@
     right: 0.5rem;
     font-size: 0.9rem;
     color: #0091e4;
+  }
+  .fromNick{
+    font-size: 12px;
+    margin: 0 10px;
+    color: #aaa;
+  }
+  .fromNickRight{
+    text-align: right;
   }
 </style>

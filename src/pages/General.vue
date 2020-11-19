@@ -21,6 +21,7 @@
 
 <script>
 import { Group, Cell } from 'vux'
+import config from '../configs'
 
 export default {
   components: {
@@ -29,7 +30,14 @@ export default {
   },
   computed: {
     myInfo () {
-      return this.$store.state.myInfo
+      const info = {...this.$store.state.myInfo}
+      const avatar = info.avatar 
+                        ? info.avatar.includes('default-icon.png')
+                          ? info.avatar
+                          : config.managerUrl + info.avatar.replace('http://', '').split('?')[0] 
+                        : ''
+      info.avatar = avatar;
+      return info
     }
   },
   methods: {
