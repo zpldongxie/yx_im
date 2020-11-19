@@ -116,14 +116,17 @@ export default {
             msg.desc = `${op.nick}拒绝了群${this.getTeamName(msg.to)}的入群邀请`
             return true
         }
-        console.log(msg)
         return false
       })
       sysMsgs.sort((msg1, msg2)=>{
         // 最新的排在前
         return msg2.time - msg1.time
       })
-      return sysMsgs
+      if (sysMsgs.length>0) {
+        localStorage.setItem("sysMsgs",JSON.stringify(sysMsgs))
+      }
+      let localSysMsgs =JSON.parse(localStorage.getItem("sysMsgs")) 
+      return localSysMsgs || []
     },
     customSysMsgs () {
       let customSysMsgs = this.$store.state.customSysMsgs.filter(msg => {
@@ -135,7 +138,11 @@ export default {
         }
         return false
       })
-      return customSysMsgs
+      if (customSysMsgs.length>0) {
+        localStorage.setItem("customSysMsgs",JSON.stringify(customSysMsgs))
+      }
+      let localCustomSysMsgs =JSON.parse(localStorage.getItem("customSysMsgs")); 
+      return localCustomSysMsgs || []
     },
     msgList() {
       return this.sysType ===  0 ? this.sysMsgs : this.customSysMsgs
@@ -154,6 +161,13 @@ export default {
       this.$vux.confirm.show({
         title: '确认要清空消息吗？',
         onConfirm () {
+          if(that.sysType == 0){
+            localStorage.removeItem('sysMsgs');
+            that.sysMsgs
+          }else{
+            localStorage.removeItem('customSysMsgs');
+            that.customSysMsgs
+          }
           that.$store.dispatch('resetSysMsgs', {
             type: that.sysType
           })
