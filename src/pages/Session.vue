@@ -90,7 +90,8 @@ export default {
           }
           if (userInfo) {
             item.name = util.getFriendAlias(userInfo)
-            item.avatar = userInfo.avatar
+            const avatar = userInfo.avatar ? config.managerUrl + userInfo.avatar.replace('http://', '').split('?')[0] : ''
+            item.avatar = avatar
           }
         } else if (item.scene === 'team') {
           let teamInfo = null
@@ -99,10 +100,12 @@ export default {
           })
           if (teamInfo) {
             item.name = teamInfo.name
-            item.avatar = teamInfo.avatar || (teamInfo.type === 'normal' ? this.myGroupIcon : this.myAdvancedIcon)
+            const avatar = teamInfo.avatar ? config.managerUrl + teamInfo.avatar.replace('http://', '').split('?')[0] : ''
+            item.avatar = avatar || (teamInfo.type === 'normal' ? this.myGroupIcon : this.myAdvancedIcon)
           } else {
+            const avatar = item.avatar ? config.managerUrl + item.avatar.replace('http://', '').split('?')[0] : ''
             item.name = `群${item.to}`
-            item.avatar = item.avatar || this.myGroupIcon
+            item.avatar = avatar || this.myGroupIcon
           }
         }
         let lastMsg = item.lastMsg || {}

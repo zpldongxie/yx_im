@@ -235,18 +235,22 @@
             if (item.type === 'robot' && item.content && item.content.msgOut) {
               // 机器人下行消息
               let robotAccid = item.content.robotAccid
-              item.avatar = this.robotInfos[robotAccid].avatar
+              const avatar = this.robotInfos[robotAccid].avatar ? config.managerUrl + this.robotInfos[robotAccid].avatar.replace('http://', '').split('?')[0] : ''
+              item.avatar = avatar
               item.isRobot = true
               item.link = `#/namecard/${robotAccid}`
             } else if (item.from !== this.$store.state.userUID) {
-              item.avatar = (this.userInfos[item.from] && this.userInfos[item.from].avatar) || config.defaultUserIcon
+              const avatar = this.userInfos[item.from].avatar ? config.managerUrl + this.userInfos[item.from].avatar.replace('http://', '').split('?')[0] : ''
+              item.avatar = avatar || config.defaultUserIcon
               item.link = `#/namecard/${item.from}`
               //todo  如果是未加好友的人发了消息，是否能看到名片
             } else {
-              item.avatar = this.myInfo.avatar
+              const avatar = this.myInfo.avatar ? config.managerUrl + this.myInfo.avatar.replace('http://', '').split('?')[0] : ''
+              item.avatar = avatar
             }
           } else if (item.flow === 'out') {
-            item.avatar = this.myInfo.avatar
+            const avatar = this.myInfo.avatar ? config.managerUrl + this.myInfo.avatar.replace('http://', '').split('?')[0] : ''
+            item.avatar = avatar
           }
         } else {
           // 标记时间，聊天室中

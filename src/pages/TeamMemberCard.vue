@@ -53,7 +53,10 @@ export default {
       if (member.account === this.$store.state.userUID) {
         userInfo = this.$store.state.myInfo
       }
-      member.avatar =  userInfo? userInfo.avatar : (member.avatar || this.avatar)
+      const avatar = userInfo.avatar ? config.managerUrl + userInfo.avatar.replace('http://', '').split('?')[0] : ''
+      const avatarM = member.avatar ? config.managerUrl + member.avatar.replace('http://', '').split('?')[0] : ''
+
+      member.avatar =  userInfo ? avatar : (avatarM || this.avatar)
       member.alias = userInfo ? userInfo.nick : (member.account || 'account')
       this.mute = !!member.mute
       return member

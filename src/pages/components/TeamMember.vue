@@ -79,15 +79,18 @@ export default {
           member.valid = true //被管理员移除后，标记为false
           if (member.account === this.$store.state.userUID) {
             member.alias = '我'
-            member.avatar = this.$store.state.myInfo.avatar
+            const avatar = this.$store.state.myInfo.avatar ? config.managerUrl + this.$store.state.myInfo.avatar.replace('http://', '').split('?')[0] : ''
+            member.avatar = avatar
             this.isOwner = member.type === 'owner'
             this.hasManagePermission = member.type !== 'normal'
           } else if (userInfos[member.account] === undefined) {
             needSearchAccounts.push(member.account)
-            member.avatar = member.avatar || this.avatar
+            const avatar = member.avatar ? config.managerUrl + member.avatar.replace('http://', '').split('?')[0] : ''
+            member.avatar = avatar || this.avatar
             member.alias = member.nickInTeam || member.account
           } else {
-            member.avatar = userInfos[member.account].avatar
+            const avatar = userInfos[member.account].avatar ? config.managerUrl + userInfos[member.account].avatar.replace('http://', '').split('?')[0] : ''
+            member.avatar = avatar
             member.alias = member.nickInTeam ||userInfos[member.account].nick
           }
           return member
@@ -134,7 +137,8 @@ export default {
           return member.account === user.account
         })
         if(member) {
-          member.avatar = user.avatar
+          const avatar = user.avatar ? config.managerUrl + user.avatar.replace('http://', '').split('?')[0] : ''
+          member.avatar = avatar
           member.alias = member.nickInTeam || user.nick
         }
       })

@@ -45,7 +45,7 @@ const getToken = async uid => {
 
 const initLocalStorage = async (uid, callback) => {
   const result = await getToken(uid);
-  console.log(result);
+  console.log('result', result);
   if(result.errCode === '0'){
     const sdktoken = result.data;
     storage.set('uid', uid);

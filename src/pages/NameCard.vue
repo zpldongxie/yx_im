@@ -72,7 +72,8 @@ export default {
       if (this.isRobot) {
         info = Object.assign({}, this.robotInfos[this.account])
         info.alias = info.nick || account
-        info.avatar = info.originAvatar || item.avatar
+        const avatar =info.avatar ? config.managerUrl +info.avatar.replace('http://', '').split('?')[0] : ''
+        info.avatar = info.originAvatar || avatar
       } else if (this.account === this.$store.state.userUID) {
         info =  Object.assign({}, this.$store.state.myInfo)
         info.alias = info.nick

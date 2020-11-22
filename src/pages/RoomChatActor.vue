@@ -43,7 +43,8 @@ export default {
     chatroomActor () {
       if (this.chatroomInfo) {
         let actor = this.chatroomInfo.actor || {}
-        actor.avatar = actor.avatar || config.defaultUserIcon
+        const avatar =actor.avatar ? config.managerUrl +actor.avatar.replace('http://', '').split('?')[0] : ''
+        actor.avatar = avatar || config.defaultUserIcon
         return actor
       }
       return {}
