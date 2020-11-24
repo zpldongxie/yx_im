@@ -2,8 +2,8 @@
   <div class="g-inherit m-article">
     <x-header class="m-tab" :left-options="{backText: ' '}">
       <button-tab class="m-tab-top" v-model="sysType">
-        <button-tab-item class="u-tab-top">系统消息</button-tab-item>
-        <button-tab-item class="u-tab-top">自定义消息</button-tab-item>
+        <button-tab-item class="u-tab-top">待办工作</button-tab-item>
+        <button-tab-item class="u-tab-top">IM消息</button-tab-item>
       </button-tab>
       <a slot="left"></a>
       <a slot="right" @click.stop="clearMsgs">清空</a>
@@ -62,6 +62,14 @@
 
 <script>
 import config from '../configs'
+
+/**
+ * 去重合并
+ */
+const mergeList = (arr1, arr2) => {
+  const newArr2 = arr2.filter((item) => !arr1.find((item1) => item1.time === item.time));
+  return arr1.concat(newArr2);
+}
 export default {
   // 进入该页面，文档被挂载
   mounted () {
@@ -74,7 +82,7 @@ export default {
   },
   data () {
     return {
-      sysType: 0, // 系统消息 0, 自定义消息 1,
+      sysType: 0, // 系统消息 1, 自定义消息 0,
       defaultAvatar: config.defaultUserIcon,
       deleteIdServer: ''
     }
@@ -84,6 +92,14 @@ export default {
       return this.$store.state.userInfos || {}
     },
     sysMsgs () {
+       // 同步本地存储
+      let yspid = localStorage.getItem('yspid');
+      let uid = localStorage.getItem('uid');
+      if (!yspid || yspid !== uid) {
+        localStorage.removeItem('sysMsgs');
+        localStorage.setItem('yspid', uid);
+      }
+      // 获取新消息
       let sysMsgs = this.$store.state.sysMsgs.filter(msg => {
         switch (msg.type) {
           case 'addFriend':
@@ -138,37 +154,51 @@ export default {
         // 最新的排在前
         return msg2.time - msg1.time
       })
+      const storage = localStorage.getItem("sysMsgs");
+      let newStorage = storage ? JSON.parse(storage) : [];
       if (sysMsgs.length>0) {
-        localStorage.setItem("sysMsgs",
-        JSON.stringify(sysMsgs))
+        // newStorage = newStorage.concat(sysMsgs);
+        newStorage = mergeList(sysMsgs, newStorage);
+        console.log('newStorage',newStorage);
+        localStorage.setItem("sysMsgs",JSON.stringify(newStorage))
       }
-      let localSysMsgs =JSON.parse(localStorage.getItem("sysMsgs")) 
-      return localSysMsgs || []
+      // let localSysMsgs =JSON.parse(localStorage.getItem("sysMsgs")) 
+      return newStorage || []
     },
     customSysMsgs () {
+       // 同步本地存储
+      let yspid = localStorage.getItem('yspid');
+      let uid = localStorage.getItem('uid');
+      if (!yspid || yspid !== uid) {
+        localStorage.removeItem('customSysMsgs');
+        localStorage.setItem('yspid', uid);
+      }
+
       let customSysMsgs = this.$store.state.customSysMsgs.filter(msg => {
         if (msg.scene === 'p2p') {
           let content = JSON.parse(msg.content)
           msg.showText = `${content.content}`
           const fromUser = fromUser || {};
           const avatar = fromUser.avatar 
-                          ? fromUser.avatar.includes('default-icon.png')
-                            ? fromUser.avatar
-                              : config.managerUrl + fromUser.avatar.replace('http://', '').split('?')[0] 
+                          ? config.managerUrl + fromUser.avatar.replace('http://', '').replace('default-icon.png', 'notice-icon.png').split('?')[0]
                           : this.defaultAvatar
           msg.avatar = avatar
           return msg
         }
         return false
       })
+      const custom = localStorage.getItem("customSysMsgs");
+      let newCustomSysMsgs = custom ? JSON.parse(custom) : [];
       if (customSysMsgs.length>0) {
-        localStorage.setItem("customSysMsgs", JSON.stringify(customSysMsgs))
+        // newCustomSysMsgs = newCustomSysMsgs.concat(customSysMsgs);
+        newCustomSysMsgs = mergeList(customSysMsgs, newCustomSysMsgs);
+        localStorage.setItem("customSysMsgs",JSON.stringify(newCustomSysMsgs))
       }
-      let localCustomSysMsgs =JSON.parse(localStorage.getItem("customSysMsgs")); 
-      return localCustomSysMsgs || []
+      // let localCustomSysMsgs =JSON.parse(localStorage.getItem("customSysMsgs")); 
+      return newCustomSysMsgs || []
     },
     msgList() {
-      return this.sysType ===  0 ? this.sysMsgs : this.customSysMsgs
+      return this.sysType ===  1 ? this.sysMsgs : this.customSysMsgs
     }
     
   },

@@ -24,21 +24,26 @@ export function initNimSDK ({ state, commit, dispatch }, loginInfo) {
   }
   // dispatch('showLoading')
   // 初始化SDK
+  // console.log('==========================');
+  // console.log(config.appkey);
+  // console.log(loginInfo);
+  // console.log('==========================');
   window.nim = state.nim = SDK.NIM.getInstance({
-    debug: true,
+    debug: false,
     appKey: config.appkey,
     account: loginInfo.uid,
     token: loginInfo.sdktoken,
     transports: ['websocket'],
     db: config.useDb,
     // logFunc: new SDK.NIM.LoggerPlugin({
-    //   url: '/webdemo/h5/getlogger',
+    //   url: '/h5/getlogger',
     //   level: 'info'
     // }),
     syncSessionUnread: true,
     syncRobots: true,
     autoMarkRead: true, // 默认为true
     onconnect: function onConnect (event) {
+      console.log('SDK.NIM.getInstance: onconnect');
       if (loginInfo) {
         // 连接上以后更新uid
         commit('updateUserUID', loginInfo)
@@ -46,6 +51,7 @@ export function initNimSDK ({ state, commit, dispatch }, loginInfo) {
     },
     onerror: function onError (event) {
       // alert(JSON.stringify(event))
+      console.log('SDK.NIM.getInstance: onerror');
       debugger
       if(event.message && event.message === '超时') {
         location.reload();
@@ -55,9 +61,11 @@ export function initNimSDK ({ state, commit, dispatch }, loginInfo) {
       }
     },
     onwillreconnect: function onWillReconnect () {
+      console.log('SDK.NIM.getInstance: onwillreconnect');
       console.log(event)
     },
     ondisconnect: function onDisconnect (error) {
+      console.log('SDK.NIM.getInstance: ondisconnect');
       switch (error.code) {
         // 账号或者密码错误, 请跳转到登录页面并提示错误
         case 302:
