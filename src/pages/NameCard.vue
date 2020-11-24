@@ -55,6 +55,7 @@
 
 <script>
 import util from '../utils'
+import config from '../configs'
 
 export default {
   data () {
@@ -72,8 +73,6 @@ export default {
       if (this.isRobot) {
         info = Object.assign({}, this.robotInfos[this.account])
         info.alias = info.nick || account
-        const avatar =info.avatar ? config.managerUrl +info.avatar.replace('http://', '').split('?')[0] : ''
-        info.avatar = info.originAvatar || avatar
       } else if (this.account === this.$store.state.userUID) {
         info =  Object.assign({}, this.$store.state.myInfo)
         info.alias = info.nick
@@ -84,6 +83,12 @@ export default {
         info.alias = util.getFriendAlias(info)
         this.isBlack = info.isBlack
       }
+      const avatar = info.avatar 
+                      ? info.avatar.includes('default-icon.png')
+                        ? info.avatar
+                        : config.managerUrl + info.avatar.replace('http://', '').split('?')[0] 
+                      : ''
+      info.avatar = info.originAvatar || avatar
       return info
     },
     robotInfos () {

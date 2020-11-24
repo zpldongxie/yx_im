@@ -630,7 +630,7 @@ export default {
     display: block;
     margin: 0 auto;
     overflow: hidden;
-    width: 220px;
+    /* width: 220px; */
     font-size: 14px;
     height: 45px;
     line-height: 18px;
