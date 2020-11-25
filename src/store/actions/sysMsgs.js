@@ -44,6 +44,7 @@ export function onSysMsgUnread (obj) {
 }
 
 export function onCustomSysMsgs (customSysMsgs) {
+  console.log('onCustomSysMsgs', customSysMsgs);
   if (!Array.isArray(customSysMsgs)) {
     customSysMsgs = [customSysMsgs]
   }

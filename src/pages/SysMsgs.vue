@@ -67,7 +67,7 @@ import config from '../configs'
  * 去重合并
  */
 const mergeList = (arr1, arr2) => {
-  const newArr2 = arr2.filter((item) => !arr1.find((item1) => item1.time === item.time));
+  const newArr2 = arr2.filter((item) => !arr1.find((item1) => item1.idServer === item.idServer));
   return arr1.concat(newArr2);
 }
 export default {
@@ -204,6 +204,18 @@ export default {
   },
   methods: {
     deleteMsg(idServer){
+      var that = this
+      if(that.sysType == 1){
+        // const list = localStorage.removeItem('sysMsgs');
+        const list = JSON.parse(localStorage.getItem('sysMsgs') || []);
+        const newList = list.filter((item) => item.idServer !== idServer);
+        localStorage.setItem('sysMsgs', newList);
+      }else{
+        // localStorage.removeItem('customSysMsgs');
+        const list = JSON.parse(localStorage.getItem('customSysMsgs') || []);
+        const newList = list.filter((item) => item.idServer !== idServer);
+        localStorage.setItem('customSysMsgs', newList);
+      }
       this.$store.commit('deleteSysMsgs', {
         type: this.sysType,
         idServer: idServer,
@@ -214,12 +226,11 @@ export default {
       this.$vux.confirm.show({
         title: '确认要清空消息吗？',
         onConfirm () {
-          if(that.sysType == 0){
+          console.log('that.sysType', that.sysType);
+          if(that.sysType == 1){
             localStorage.removeItem('sysMsgs');
-            that.sysMsgs
           }else{
             localStorage.removeItem('customSysMsgs');
-            that.customSysMsgs
           }
           that.$store.dispatch('resetSysMsgs', {
             type: that.sysType

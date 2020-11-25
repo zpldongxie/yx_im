@@ -387,11 +387,14 @@ export default {
     let type = obj.type
     switch (type) {
       case 0:
-        state.sysMsgs = []
-        break
-      case 1:
         state.customSysMsgs = []
         store.commit('updateCustomSysMsgUnread', {
+          type: 'reset'
+        })
+        break
+      case 1:
+        state.sysMsgs = []
+        store.commit('updateSysMsgUnread', {
           type: 'reset'
         })
         break
@@ -400,11 +403,15 @@ export default {
   deleteSysMsgs (state, obj) {
     let type = obj.type
     let idServer = obj.idServer
-    let arr = type===0 ? state.sysMsgs : state.customSysMsgs
+    let arr = type===1 ? state.sysMsgs : state.customSysMsgs
     arr = arr.filter(msg=>{
       return msg.idServer !== idServer
     })
-    Vue.set(state, 'sysMsgs', arr)
+    if (type === 1) {
+      Vue.set(state, 'sysMsgs', arr)
+    } else {
+      Vue.set(state, 'customSysMsgs', arr)
+    }
   },
   setNoMoreHistoryMsgs (state) {
     state.noMoreHistoryMsgs = true
