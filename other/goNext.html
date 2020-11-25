@@ -43,7 +43,7 @@
 
     <script>
       // 加密并跳转
-      function goNext(uid) {
+      function goNext(uid, host) {
         var ran = randomString(32);
 
         var aesCode = encodeURI(
@@ -97,14 +97,14 @@
         if (isAndroid) {
           var userInfo = getUserInfoForAndroid();
           var uid = userInfo.loginName;
-          goNext(uid);
+          goNext(uid, host);
         } else if (isiOS) {
           setupWebViewJavascriptBridge(function (bridge) {
             //客户端已经注册好一个名为“getUserInfo”的方法，H5直接进行调用（方法名也为“getUserInfo”）就行，调用的时候可以传客户端需要的参数
             bridge.callHandler("getUserInfo", function responseCallback(responseData) {
               console.log("registerOCmethod:", responseData);
               var uid = responseData.account;
-              goNext(uid);
+              goNext(uid, host);
             });
           });
         } else {
