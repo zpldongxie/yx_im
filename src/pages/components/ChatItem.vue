@@ -231,26 +231,32 @@
         let item = Object.assign({}, this.rawMsg)
         // 标记用户，区分聊天室、普通消息
         if (this.type === 'session') {
+          let currentAvatar; // 头像，在后面统一处理
           if (item.flow === 'in') {
             if (item.type === 'robot' && item.content && item.content.msgOut) {
               // 机器人下行消息
               let robotAccid = item.content.robotAccid
-              const avatar = this.robotInfos[robotAccid].avatar ? config.managerUrl + this.robotInfos[robotAccid].avatar.replace('http://', '').split('?')[0] : ''
-              item.avatar = avatar
+              currentAvatar = this.robotInfos[robotAccid].avatar;
               item.isRobot = true
               item.link = `#/namecard/${robotAccid}`
             } else if (item.from !== this.$store.state.userUID) {
-              const avatar = this.userInfos[item.from].avatar ? config.managerUrl + this.userInfos[item.from].avatar.replace('http://', '').split('?')[0] : ''
-              item.avatar = avatar || config.defaultUserIcon
+              currentAvatar = this.userInfos[item.from].avatar;
               item.link = `#/namecard/${item.from}`
               //todo  如果是未加好友的人发了消息，是否能看到名片
             } else {
-              const avatar = this.myInfo.avatar ? config.managerUrl + this.myInfo.avatar.replace('http://', '').split('?')[0] : ''
-              item.avatar = avatar
+              currentAvatar = this.myInfo.avatar;
             }
           } else if (item.flow === 'out') {
-            const avatar = this.myInfo.avatar ? config.managerUrl + this.myInfo.avatar.replace('http://', '').split('?')[0] : ''
-            item.avatar = avatar
+            currentAvatar = this.myInfo.avatar;
+          }
+          // 统一处理头像
+          if (currentAvatar) {
+            const avatar = currentAvatar !== '' 
+                    ? currentAvatar.includes('default-icon.png')
+                      ? currentAvatar
+                      : config.managerUrl + currentAvatar.replace('http://', '').split('?')[0] 
+                    : ''
+            item.avatar = avatar || config.defaultUserIcon
           }
         } else {
           // 标记时间，聊天室中
