@@ -169,7 +169,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang=less>
 
 .m-members {
   display: flex;

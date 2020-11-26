@@ -89,6 +89,7 @@ export default {
         let alias = thisAttrs.alias ? thisAttrs.alias.trim() : ''
         item.alias = alias || thisAttrs.nick || account
         item.link = `/namecard/${item.account}`
+        console.log('item', item);
         if ((!thisAttrs.isFriend) || (thisAttrs.isBlack)) {
           return false
         }
@@ -121,7 +122,7 @@ export default {
 }
 </script>
 
-<style type="text/css">
+<style type="text/css" lang=less>
   .p-contacts {
     ::-webkit-scrollbar {
          display: none;
