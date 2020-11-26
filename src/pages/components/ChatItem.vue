@@ -251,12 +251,13 @@
           }
           // 统一处理头像
           if (currentAvatar) {
-            const avatar = currentAvatar !== '' 
-                    ? currentAvatar.includes('default-icon.png')
-                      ? currentAvatar
-                      : config.managerUrl + currentAvatar.replace('http://', '').split('?')[0] 
-                    : ''
-            item.avatar = avatar || config.defaultUserIcon
+            // const avatar = currentAvatar !== '' 
+            //         ? currentAvatar.includes('default-icon.png')
+            //           ? currentAvatar
+            //           : config.managerUrl + currentAvatar.replace('http://', '').split('?')[0] 
+            //         : ''
+            // item.avatar = avatar || config.defaultUserIcon
+            item.avatar = currentAvatar;
           }
         } else {
           // 标记时间，聊天室中
@@ -522,7 +523,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang=less>
   .p-chat-history {
     .u-msg {
       .msg-link {

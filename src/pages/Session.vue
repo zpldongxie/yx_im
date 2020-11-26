@@ -90,13 +90,7 @@ export default {
           }
           if (userInfo) {
             item.name = util.getFriendAlias(userInfo)
-            const avatar = userInfo.avatar || ''
-            const currentAvatar = avatar 
-                    ? avatar.includes('default-icon.png')
-                      ? avatar
-                        : config.managerUrl + avatar.replace('http://', '').split('?')[0] 
-                    : ''
-            item.avatar = currentAvatar
+            item.avatar = userInfo.avatar
           }
         } else if (item.scene === 'team') {
           let teamInfo = null

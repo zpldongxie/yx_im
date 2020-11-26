@@ -83,12 +83,6 @@ export default {
         info.alias = util.getFriendAlias(info)
         this.isBlack = info.isBlack
       }
-      const avatar = info.avatar 
-                      ? info.avatar.includes('default-icon.png')
-                        ? info.avatar
-                        : config.managerUrl + info.avatar.replace('http://', '').split('?')[0] 
-                      : ''
-      info.avatar = info.originAvatar || avatar
       return info
     },
     robotInfos () {

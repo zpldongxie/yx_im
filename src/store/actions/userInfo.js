@@ -31,14 +31,20 @@ export function formatUserInfo (obj) {
   }
 
   if (obj.avatar) {
-    obj.avatar = nim.viewImageSync({
-      url: obj.avatar, // 必填
-      thumbnail: { // 生成缩略图， 可选填
-        width: 40,
-        height: 40,
-        mode: 'cover'
-      }
-    })
+    const currentAvatar = obj.avatar 
+            ? obj.avatar.includes('default-icon.png')
+              ? obj.avatar
+                : config.managerUrl + obj.avatar.replace('http://', '').split('?')[0] 
+            : ''
+    obj.avatar = currentAvatar
+    // obj.avatar = nim.viewImageSync({
+    //   url: obj.avatar, // 必填
+    //   thumbnail: { // 生成缩略图， 可选填
+    //     width: 40,
+    //     height: 40,
+    //     mode: 'cover'
+    //   }
+    // })
     // obj.avatar += '?imageView&thumbnail=40x40&quality=85'
   } else {
     obj.avatar = config.defaultUserIcon
