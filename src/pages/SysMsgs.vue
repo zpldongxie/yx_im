@@ -49,9 +49,8 @@
             :idServer ="msg.idServer"
             v-touch:swipeleft="showDelBtn"
             v-touch:swiperight="hideDelBtn"
-            @click.native="yjzdMsg(msg.payload.XXID, msg.payload.JSR, msg.payload.LCID, msg.payload.LYXT, msg.payload.TASKTYPE)"
           >
-            <img class="icon" slot="icon" width="24" :src="msg.avatar">
+            <img class="icon" slot="icon" width="24" :src="msg.avatar" @click="yjzdMsg(msg.payload.XXID, msg.payload.JSR, msg.payload.LCID, msg.payload.LYXT, msg.payload.TASKTYPE)">
             <!-- <span>{{msg.pushPayload}}</span> -->
             <span class="u-tag-del" :class="{active: deleteIdServer === msg.idServer}" @click="deleteMsg(msg.idServer)"></span>
           </cell>
@@ -298,19 +297,22 @@ export default {
       return false
     },
     yjzdMsg (XXID, JSR, LCID, LYXT, TASKTYPE) {  // 一键直达
+      let newUrl;
       if(LYXT == 'XLC'){ // 新流程
-          window.open(config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID)
+          newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID
       }else if(LYXT == 'GYJC'){ // 公寓检查
-          window.open(config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_gyjc.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID)
+          newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_gyjc.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID
       }else if(LYXT == 'ZYGL'){ // 作业管理
-          window.open(config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_zygl.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID)
+          newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_zygl.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID
       }else if(LYXT == 'PY'){ // 普元
           let xxcs = {xxid:XXID}
           commonAPI.setXxztAPI(xxcs).then(res => { // 设置整体消息状态
               console.log(res)
           })
-          window.open('http://' + process.env.VUE_APP_PUYUAN_URL + '/default/commom/login/messageurl.jsp?tyxtlb=xjmhMessages&wkItemID=' + LCID + '@' + TASKTYPE)
+          newUrl = 'http://' + process.env.VUE_APP_PUYUAN_URL + '/default/commom/login/messageurl.jsp?tyxtlb=xjmhMessages&wkItemID=' + LCID + '@' + TASKTYPE
       }
+      // newUrl && window.open(newUrl);
+      newUrl && (window.location.href = newUrl);
       let _this = this
       setTimeout(function (){
           _this.getXxList()
