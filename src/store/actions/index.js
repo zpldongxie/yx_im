@@ -34,8 +34,6 @@ function connectNim ({state, commit, dispatch}, obj) {
       // 参数里有指定用户
       // if (!loginInfo.uid || loginInfo.uid !== currentId) {
         initLocalStorage(currentId, result => {
-          console.log('--------------------------------');
-          console.log('result', result);
           dispatch('hideLoading')
           if(result) {
             dispatch('initNimSDK', {

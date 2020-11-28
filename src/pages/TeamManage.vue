@@ -84,8 +84,8 @@ export default {
       return this.teamMembers && this.teamMembers.length
     },
     teamAvatar() {
-      const avatar = this.teamInfo.avatar ? config.managerUrl + this.teamInfo.avatar.replace('http://', '').split('?')[0] : ''
-      return avatar || this.avatar
+      // const avatar = this.teamInfo.avatar ? config.managerUrl + this.teamInfo.avatar.replace('http://', '').split('?')[0] : ''
+      return this.teamInfo.avatar || this.avatar
     },
     teamName() {
       return this.teamInfo && this.teamInfo.name || '未设置'

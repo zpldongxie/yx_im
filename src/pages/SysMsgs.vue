@@ -106,46 +106,36 @@ export default {
           case 'addFriend':
             msg.showText = `${msg.friend.alias || msg.friend.account} 添加您为好友~`
             const addAvatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? this.userInfos[msg.from].avatar : ''
-            const currentAddAvatar = addAvatar 
-                          ? addAvatar.includes('default-icon.png')
-                            ? addAvatar
-                              : config.managerUrl + addAvatar.replace('http://', '').split('?')[0] 
-                          : ''
-            msg.avatar = currentAddAvatar
+            msg.avatar = addAvatar
             return true
           case 'deleteFriend':
             msg.showText = `${msg.from} 将您从好友中删除`
-            const showAvatar = this.userInfos[msg.from].avatar || ''
-            const currentShowAvatar = showAvatar 
-                          ? showAvatar.includes('default-icon.png')
-                            ? showAvatar
-                              : config.managerUrl + showAvatar.replace('http://', '').split('?')[0] 
-                          : ''
-            msg.avatar = currentShowAvatar 
+            const showAvatar = this.userInfos[msg.from].avatar || this.defaultAvatar
+            msg.avatar = showAvatar
             return false
           case 'applyTeam':
             msg.showText = msg.from
-            const applyAvatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? config.managerUrl + this.userInfos[msg.from].avatar.replace('http://', '').split('?')[0] : ''
-            msg.avatar = applyAvatar || this.defaultAvatar
+            const applyAvatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? this.userInfos[msg.from].avatar : this.defaultAvatar
+            msg.avatar = applyAvatar
             msg.desc = `申请加入群:${this.getTeamName(msg.to)}`
             return true
           case 'teamInvite':
             msg.showText = msg.attach.team.name
-            const teamavatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? config.managerUrl + this.userInfos[msg.from].avatar.replace('http://', '').split('?')[0] : ''
-            msg.avatar =  teamavatar || this.defaultAvatar
+            const teamavatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? this.userInfos[msg.from].avatar : this.defaultAvatar
+            msg.avatar =  teamavatar
             msg.desc = `邀请你加入群${msg.to}`
             return true
           case 'rejectTeamApply':
             msg.showText = msg.attach.team.name
             msg.desc ='管理员拒绝你加入本群'
-            const rejectavatar = msg.attach.team.avatar ? config.managerUrl + msg.attach.team.avatar.replace('http://', '').split('?')[0] : ''
-            msg.avatar = rejectavatar || this.defaultAvatar
+            const rejectavatar = msg.attach.team.avatar ? msg.attach.team.avatar : this.defaultAvatar
+            msg.avatar = rejectavatar
             return true
           case 'rejectTeamInvite':
             let op = this.userInfos[msg.from]
             msg.showText = op.nick
-            const inviteavatar = op.avatar ? config.managerUrl + op.avatar.replace('http://', '').split('?')[0] : ''
-            msg.avatar = inviteavatar || this.defaultAvatar
+            const inviteavatar = op.avatar ? op.avatar : this.defaultAvatar
+            msg.avatar = inviteavatar
             msg.desc = `${op.nick}拒绝了群${this.getTeamName(msg.to)}的入群邀请`
             return true
         }

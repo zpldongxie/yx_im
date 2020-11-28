@@ -79,19 +79,13 @@ export default {
           member.valid = true //被管理员移除后，标记为false
           if (member.account === this.$store.state.userUID) {
             member.alias = '我'
-            // const avatar = this.$store.state.myInfo.avatar ? config.managerUrl + this.$store.state.myInfo.avatar.replace('http://', '').split('?')[0] : ''
-            // member.avatar = avatar
             member.avatar = this.$store.state.myInfo.avatar;
             this.isOwner = member.type === 'owner'
             this.hasManagePermission = member.type !== 'normal'
           } else if (userInfos[member.account] === undefined) {
             needSearchAccounts.push(member.account)
-            // const avatar = member.avatar ? config.managerUrl + member.avatar.replace('http://', '').split('?')[0] : ''
-            // member.avatar = avatar || this.avatar
             member.alias = member.nickInTeam || member.account
           } else {
-            // const avatar = userInfos[member.account].avatar ? config.managerUrl + userInfos[member.account].avatar.replace('http://', '').split('?')[0] : ''
-            // member.avatar = avatar
             member.avatar = userInfos[member.account].avatar
             member.alias = member.nickInTeam ||userInfos[member.account].nick
           }

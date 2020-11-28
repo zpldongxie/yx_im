@@ -29,9 +29,7 @@ export default {
         if (!member.avatar) {
           member.avatar = config.defaultUserIcon
         } else if (!/\?imageView/.test(member.avatar)) {
-          const avatar =member.avatar ? config.managerUrl + member.avatar.replace('http://', '').split('?')[0] : ''
           // member.avatar += '?imageView&thumbnail=40x40&quality=85'
-          member.avatar = avatar;
         }
         switch (member.type) {
           case 'owner':

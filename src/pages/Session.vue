@@ -99,12 +99,10 @@ export default {
           })
           if (teamInfo) {
             item.name = teamInfo.name
-            const avatar = teamInfo.avatar ? config.managerUrl + teamInfo.avatar.replace('http://', '').split('?')[0] : ''
-            item.avatar = avatar || (teamInfo.type === 'normal' ? this.myGroupIcon : this.myAdvancedIcon)
+            item.avatar = teamInfo.avatar || (teamInfo.type === 'normal' ? this.myGroupIcon : this.myAdvancedIcon)
           } else {
-            const avatar = item.avatar ? config.managerUrl + item.avatar.replace('http://', '').split('?')[0] : ''
             item.name = `群${item.to}`
-            item.avatar = avatar || this.myGroupIcon
+            item.avatar = item.avatar || this.myGroupIcon
           }
         }
         let lastMsg = item.lastMsg || {}
