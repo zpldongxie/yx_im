@@ -32,7 +32,7 @@ export function formatUserInfo (obj) {
 
   if (obj.avatar) {
     const currentAvatar = obj.avatar 
-            ? obj.avatar.includes('nim-nosdn.netease.im')
+            ? obj.avatar.includes('nim-nosdn.netease.im') || obj.avatar.includes('yx-web.nos.netease.com')
               ? obj.avatar
                 : config.managerUrl + obj.avatar.replace('http://', '').split('?')[0] 
             : ''

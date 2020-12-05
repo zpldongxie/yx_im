@@ -132,7 +132,7 @@ export default {
 }
 </script>
 
-<style type="text/css">
+<style type="text/css" lang="less">
   .bottom{
     font-size: 14px;
     text-align: center;
