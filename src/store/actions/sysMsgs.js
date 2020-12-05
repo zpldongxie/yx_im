@@ -3,10 +3,20 @@ import {onUpdateFriend, onDeleteFriend} from './friends'
 import {onRevocateMsg} from './msgs'
 
 export function onSysMsgs (sysMsgs) {
+  if (!Array.isArray(sysMsgs)) {
+    sysMsgs = [sysMsgs]
+  }
+  sysMsgs.forEach(msg => {    
+    // 默认为未读
+    msg.unRead = true;
+  });
+
   store.commit('updateSysMsgs', sysMsgs)
 }
 
 export function onSysMsg (sysMsg) {
+  // 默认为未读
+  sysMsg.unRead = true;
   switch (sysMsg.type) {
     // 在其他端添加或删除好友
     case 'addFriend':
@@ -19,6 +29,7 @@ export function onSysMsg (sysMsg) {
       onDeleteFriend(null, {
         account: sysMsg.from
       })
+      store.commit('updateSysMsgs', [sysMsg])
       break
     // 对方消息撤回
     case 'deleteMsg':
@@ -60,6 +71,8 @@ export function onCustomSysMsgs (customSysMsgs) {
         } catch (e) {}
       }
     }
+    // 默认为未读
+    msg.unRead = true;
     return true
   })
   if (customSysMsgs.length > 0) {

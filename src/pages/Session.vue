@@ -61,9 +61,18 @@ export default {
     sysMsgUnread () {
       let temp = this.$store.state.sysMsgUnread
       let sysMsgUnread = temp.addFriend || 0
+      sysMsgUnread += temp.deleteFriend || 0
       sysMsgUnread += temp.team || 0
       let customSysMsgUnread = this.$store.state.customSysMsgUnread
-      return sysMsgUnread + customSysMsgUnread
+      const num = sysMsgUnread + customSysMsgUnread
+      const postData = {method: 'onSysMessage', payload: {length: 0}};
+      if (num) {
+        postData.payload.length = num;
+      } 
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(JSON.stringify(postData), '*')
+      }
+      return num
     },
     userInfos () {
       return this.$store.state.userInfos

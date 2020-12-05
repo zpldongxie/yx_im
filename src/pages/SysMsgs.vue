@@ -2,8 +2,8 @@
   <div class="g-inherit m-article">
     <x-header class="m-tab" :left-options="{backText: ' '}">
       <button-tab class="m-tab-top" v-model="sysType">
-        <button-tab-item class="u-tab-top">待办工作</button-tab-item>
-        <button-tab-item class="u-tab-top">IM消息</button-tab-item>
+        <button-tab-item class="u-tab-top">待办工作<span v-if="customSysMsgs.length" class="red" ></span></button-tab-item>
+        <button-tab-item class="u-tab-top">IM消息<span v-if="sysMsgUnread" class="red"></span></button-tab-item>
       </button-tab>
       <a slot="left"></a>
       <a slot="right" @click.stop="clearMsgs">清空</a>
@@ -112,7 +112,7 @@ export default {
             msg.showText = `${msg.from} 将您从好友中删除`
             const showAvatar = this.userInfos[msg.from].avatar || this.defaultAvatar
             msg.avatar = showAvatar
-            return false
+            return true
           case 'applyTeam':
             msg.showText = msg.from
             const applyAvatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? this.userInfos[msg.from].avatar : this.defaultAvatar
@@ -193,11 +193,40 @@ export default {
       return newCustomSysMsgs || []
     },
     msgList() {
+      if (this.sysType ===  1) {
+        this.sysMsgs.forEach(msg => {
+          msg.unRead = false;
+        });
+        this.$store.commit('updateSysMsgs', this.sysMsgs)
+        this.postMessage(this.allUnread);
+      }
       return this.sysType ===  1 ? this.sysMsgs : this.customSysMsgs
+    },
+    sysMsgUnread () {
+      const list = this.sysMsgs.find(msg => msg.unRead);
+      console.log('list', list);
+      return !!list
+    },
+    customMsgUnread () {
+      const list = this.customSysMsgs
+      return !!list.length
+    },
+    allUnread () {
+      const sysList = this.sysMsgs.filter(msg => msg.unRead);
+      const customList = this.customSysMsgs.filter(msg => msg.unRead);
+      return sysList.length + customList.length;
     }
-    
   },
   methods: {
+    postMessage(num){
+      const postData = {method: 'onSysMessage', payload: {length: num}};
+      if (num) {
+        postData.payload.length = num;
+      } 
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(JSON.stringify(postData), '*')
+      }
+    },
     deleteMsg(idServer){
       var that = this
       if(that.sysType == 1){
@@ -288,25 +317,70 @@ export default {
     },
     yjzdMsg (XXID, JSR, LCID, LYXT, TASKTYPE) {  // 一键直达
       let newUrl;
-      if(LYXT == 'XLC'){ // 新流程
+      // TODO 1. 所有消息触发跳转时要发送信息给门户后台，同步已读状态
+      //      2. 实现一个方法，分析要跳转的目标是否为移动端应用，以及是适配应用还是在线应用
+      //      3. 可通过idp接口解决第二个问题，如果是适配应用，同时返回跳转所需的其他属性
+      switch(LYXT){
+        case 'XLC': // 新流程
           newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID
-      }else if(LYXT == 'GYJC'){ // 公寓检查
+          break
+        case 'GYJC': // 公寓检查
           newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_gyjc.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID
-      }else if(LYXT == 'ZYGL'){ // 作业管理
+          break
+        case 'ZYGL': // 作业管理
           newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_zygl.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID
-      }else if(LYXT == 'PY'){ // 普元
-          let xxcs = {xxid:XXID}
-          commonAPI.setXxztAPI(xxcs).then(res => { // 设置整体消息状态
-              console.log(res)
-          })
+          break
+        case 'PXBGLSH': // 培训班
+        case 'PXBGLSQ':
+          newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_pxb.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID + '&BJ=' + LYXT
+          break
+        case 'PXBGLBM': // 培训班报名
+          window.open(process.env.VUE_APP_newLC_URL + '/fh-system/admin/casCheck?redirectUrl=/pxbgl/pxbbm/pxbbm_list.html')
+          break
+        case 'XSHDSH': // 线上大学生活动
+        case 'XSHDSQ':
+          window.open(process.env.VUE_APP_newLC_URL + '/fh-system/admin/casCheck?redirectUrl=/message_station_xsdxshd.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID + '&BJ=' + LYXT)
+          break
+        case 'XSHDBM': // 线上大学生活动报名
+          window.open(process.env.VUE_APP_newLC_URL + '/fh-system/admin/casCheck?redirectUrl=/xsdxshd/hdbm/hdbm_list.html')
+          break
+        case 'PY': // 普元
           newUrl = 'http://' + process.env.VUE_APP_PUYUAN_URL + '/default/commom/login/messageurl.jsp?tyxtlb=xjmhMessages&wkItemID=' + LCID + '@' + TASKTYPE
+          break
       }
-      // newUrl && window.open(newUrl);
-      newUrl && (window.location.href = newUrl);
-      let _this = this
-      setTimeout(function (){
-          _this.getXxList()
-      },1000)
+      if (newUrl) {
+        const postData = LYXT == 'PY' ? {
+          method: 'openUrl',
+          payload: {
+            id: "ad9930e4-728c-4c2f-8b44-cc4b0fba591a",
+            type: 2,
+            address: newUrl,
+            name: '个人数据中心',
+            packageUrl: 'http://59.75.39.25/files/applications/5f1fdadb4bc860135ece13a6/t4u95bwn1oe.pam',
+            logoUrl: '',
+            description: '',
+            isVisible: true,
+            isMarketApplication: false
+          }
+        } : {
+          method: 'openUrl',
+          payload: {
+            id: "baidu",
+            type: 1,
+            address: newUrl
+          }
+        };
+        if (LYXT === 'PY') {
+          alert('旧系统消息请在PC端进行处理')
+          return;
+        }
+
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage(JSON.stringify(postData), '*')
+        } else {
+          window.open(newUrl)
+        }
+      }
       // window.open("http://192.168.0.37:8080/fhcloud-client-pc/views/message_station.html?XXID=c078ca5b3d514433bffe2f2eebf57966&JSR=20060057&LCID=1227501")
     }
   }
@@ -314,6 +388,26 @@ export default {
 </script>
 
 <style type="text/css" lang=less>
+  .m-tab {
+    .m-tab-top {
+      .u-tab-top {
+        .red {
+          display: inline-block;
+          position: absolute;
+          top: 0.3rem;
+          padding: 2px;
+          width: 0.2rem;
+          height: 0.2rem;
+          line-height: 0.5rem;
+          /* font-size: 12px; */
+          background-color: #f00;
+          color: #fff;
+          text-align: center;
+          border-radius: 100%;
+        }
+      }
+    }
+  }
   .p-sysmsgs {
     padding-top: 58px;
     .u-list {
