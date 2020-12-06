@@ -96,8 +96,7 @@ export default {
       let result = []
       if (this.searchType === 1) {
         result = this.$store.state.searchedTeams.map(item => {
-          // const avatar = item.avatar ? config.managerUrl + item.avatar.replace('http://', '').split('?')[0] : ''
-          // item.avatar = avatar || config.defaultUserIcon
+          item.avatar = item.avatar || config.defaultUserIcon
           item.link = `/teamcard/${item.teamId}`
           return item
         })
@@ -106,8 +105,7 @@ export default {
           console.log('item', item);
           item.nick = item.nick || item.name
           item.link = `/namecard/${item.account}`
-          // const avatar = item.avatar ? config.managerUrl + item.avatar.replace('http://', '').split('?')[0] : ''
-          // item.avatar = avatar || config.defaultUserIcon
+          item.avatar = item.avatar || config.defaultUserIcon
           return item
         })
       }

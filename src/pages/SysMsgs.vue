@@ -2,8 +2,8 @@
   <div class="g-inherit m-article">
     <x-header class="m-tab" :left-options="{backText: ' '}">
       <button-tab class="m-tab-top" v-model="sysType">
-        <button-tab-item class="u-tab-top">待办工作<span v-if="customSysMsgs.length" class="red" ></span></button-tab-item>
-        <button-tab-item class="u-tab-top">IM消息<span v-if="sysMsgUnread" class="red"></span></button-tab-item>
+        <button-tab-item class="u-tab-top">待办工作<span v-if="!!customMsgUnread.length" class="red" ></span></button-tab-item>
+        <button-tab-item class="u-tab-top">IM消息<span v-if="!!sysMsgUnread.length" class="red"></span></button-tab-item>
       </button-tab>
       <a slot="left"></a>
       <a slot="right" @click.stop="clearMsgs">清空</a>
@@ -50,8 +50,8 @@
             v-touch:swipeleft="showDelBtn"
             v-touch:swiperight="hideDelBtn"
           >
-            <img class="icon" slot="icon" width="24" :src="msg.avatar" @click="yjzdMsg(msg.payload.XXID, msg.payload.JSR, msg.payload.LCID, msg.payload.LYXT, msg.payload.TASKTYPE)">
-            <!-- <span>{{msg.pushPayload}}</span> -->
+            <img v-if="sysType===0" class="icon" style="width: 2em; height: 1.4em;" slot="icon" :src="msg.unRead ? clIcon: yclIcon" @click="yjzdMsg(msg)" />
+            <img v-if="sysType===1" class="icon" slot="icon" width="24" :src="msg.avatar">
             <span class="u-tag-del" :class="{active: deleteIdServer === msg.idServer}" @click="deleteMsg(msg.idServer)"></span>
           </cell>
         </template>
@@ -85,6 +85,8 @@ export default {
     return {
       sysType: 0, // 系统消息 1, 自定义消息 0,
       defaultAvatar: config.defaultUserIcon,
+      clIcon: config.clIcon,
+      yclIcon: config.yclIcon,
       deleteIdServer: ''
     }
   },
@@ -203,18 +205,15 @@ export default {
       return this.sysType ===  1 ? this.sysMsgs : this.customSysMsgs
     },
     sysMsgUnread () {
-      const list = this.sysMsgs.find(msg => msg.unRead);
-      console.log('list', list);
-      return !!list
+      const list = this.sysMsgs.filter(msg => msg.unRead);
+      return list
     },
     customMsgUnread () {
-      const list = this.customSysMsgs
-      return !!list.length
+      const list = this.customSysMsgs.filter(msg => msg.unRead);
+      return list
     },
     allUnread () {
-      const sysList = this.sysMsgs.filter(msg => msg.unRead);
-      const customList = this.customSysMsgs.filter(msg => msg.unRead);
-      return sysList.length + customList.length;
+      return this.sysMsgUnread.length + this.customMsgUnread.length;
     }
   },
   methods: {
@@ -228,15 +227,12 @@ export default {
       }
     },
     deleteMsg(idServer){
-      var that = this
       if(that.sysType == 1){
-        // const list = localStorage.removeItem('sysMsgs');
-        const list = JSON.parse(localStorage.getItem('sysMsgs') || []);
+        const list = this.sysMsgs; // JSON.parse(localStorage.getItem('sysMsgs') || []);
         const newList = list.filter((item) => item.idServer !== idServer);
         localStorage.setItem('sysMsgs', newList);
       }else{
-        // localStorage.removeItem('customSysMsgs');
-        const list = JSON.parse(localStorage.getItem('customSysMsgs') || []);
+        const list = this.customSysMsgs; JSON.parse(localStorage.getItem('customSysMsgs') || []);
         const newList = list.filter((item) => item.idServer !== idServer);
         localStorage.setItem('customSysMsgs', newList);
       }
@@ -315,8 +311,26 @@ export default {
       }
       return false
     },
-    yjzdMsg (XXID, JSR, LCID, LYXT, TASKTYPE) {  // 一键直达
-      let newUrl;
+    yjzdMsg (msg) {  // 一键直达
+      const {
+        idServer,
+        unRead,
+        payload: {
+          XXID,JSR,LCID,LYXT,TASKTYPE
+        }
+      } = msg
+      if (!unRead) {
+        return false;
+      }
+      // msg.payload.XXID, msg.payload.JSR, msg.payload.LCID, msg.payload.LYXT, msg.payload.TASKTYPE
+      // 更新已读状态
+      const current = this.customSysMsgs.find(cmsg => cmsg.idServer === idServer)
+      current.unRead = false
+      this.$store.commit('updateCustomSysMsgs', this.customSysMsgs)
+      this.postMessage(this.allUnread);
+
+      // 执行跳转
+      let newUrl
       // TODO 1. 所有消息触发跳转时要发送信息给门户后台，同步已读状态
       //      2. 实现一个方法，分析要跳转的目标是否为移动端应用，以及是适配应用还是在线应用
       //      3. 可通过idp接口解决第二个问题，如果是适配应用，同时返回跳转所需的其他属性

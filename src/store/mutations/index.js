@@ -364,8 +364,7 @@ export default {
       msg.showTime = util.formatDate(msg.time, false)
       return msg
     })
-    // state.customSysMsgs = nim.mergeSysMsgs(state.customSysMsgs, sysMsgs)
-    state.customSysMsgs = state.customSysMsgs.concat(sysMsgs)
+    state.customSysMsgs = nim.mergeSysMsgs(state.customSysMsgs, sysMsgs)
     Vue.set(state, sysMsgs, state.customSysMsgs)
     store.commit('updateCustomSysMsgUnread', {
       type: 'add',

@@ -28,6 +28,10 @@ let config = {
   sessionIcon: `${rootUrl}/img/im/session.png`,
   // 加号图标
   addIcon: `${rootUrl}/img/im/add.png`,
+  // 处理图标
+  clIcon: `${rootUrl}/img/im/cl.png`,
+  // 已处理图标
+  yclIcon: `${rootUrl}/img/im/ycl.png`,
   // 本地消息显示数量，会影响性能
   localMsglimit: 36,
   useDb: false
