@@ -75,12 +75,12 @@ const getAppUserInfo = (callback) => {
   }
 
   // 入口
-  // const currentURL = new URL(location.href);
-  // const currentId = currentURL.searchParams.get('loginName');
-  // if (currentId) {
-  //   callback(currentId, 'XjXmhSS20201202');
-  // } else 
-  if (isAndroid && yspCheckIn) {
+  const currentURL = new URL(location.href);
+  const currentId = currentURL.searchParams.get('loginName');
+  if (currentId) {
+    const pwd = currentId.length <= 8 ? 'XjSyx20201202TC' : 'XjXmhSS20201202'
+    callback(currentId, pwd);
+  } else if (isAndroid && yspCheckIn) {
     var userInfo = getUserInfoForAndroid();
     callback(userInfo.loginName, userInfo.password);
   } else if (isiOS) {
