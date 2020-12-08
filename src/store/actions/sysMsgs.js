@@ -72,7 +72,7 @@ export function onCustomSysMsgs (customSysMsgs) {
       }
     }
     // 默认为未读
-    msg.unRead = true;
+    // msg.unRead = true;
     return true
   })
   if (customSysMsgs.length > 0) {

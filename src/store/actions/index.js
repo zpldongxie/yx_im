@@ -2,7 +2,7 @@
 // Action 可以包含任意异步操作。
 // import cookie from '../../utils/cookie'
 import storage from '../../utils/localStorage'
-import { initLocalStorage } from '../../api'
+import { getAppUserInfo, initLocalStorage, initToDoList } from '../../api'
 import pageUtil from '../../utils/page'
 
 /* 导出actions方法 */
@@ -14,7 +14,7 @@ import {updateFriend, addFriend, deleteFriend} from './friends'
 import {resetSearchResult, searchUsers, searchTeam} from './search'
 import {deleteSession, setCurrSession, resetCurrSession} from './session'
 import {sendMsg, sendFileMsg, sendMsgReceipt, sendRobotMsg, revocateMsg, updateLocalMsg, getHistoryMsgs, resetNoMoreHistoryMsgs, continueRobotMsg} from './msgs'
-import {markSysMsgRead, resetSysMsgs, deleteSysMsgs, markCustomSysMsgRead} from './sysMsgs'
+import {markSysMsgRead, resetSysMsgs, deleteSysMsgs, markCustomSysMsgRead, onCustomSysMsgs} from './sysMsgs'
 import {sendChatroomMsg, sendChatroomRobotMsg, sendChatroomFileMsg, getChatroomHistoryMsgs} from './chatroomMsgs'
 import {initChatroomInfos, getChatroomInfo, getChatroomMembers, clearChatroomMembers} from './chatroomInfos'
 import { delegateTeamFunction, onTeamNotificationMsg, enterSettingPage, getTeamMembers, checkTeamMsgReceipt, getTeamMsgReads} from './team'
@@ -23,43 +23,77 @@ function connectNim ({state, commit, dispatch}, obj) {
   let {force} = Object.assign({}, obj)
   // 操作为内容页刷新页面，此时无nim实例
   if (!state.nim || force) {
-    const currentURL = new URL(location.href);
-    const currentId = currentURL.searchParams.get('loginName');
     let loginInfo = {
       uid: storage.get('uid'),
       sdktoken: storage.get('sdktoken'),
     }
-    if (currentId) {
-      console.log('currentId: ', currentId);
-      // 参数里有指定用户
-      // if (!loginInfo.uid || loginInfo.uid !== currentId) {
-        initLocalStorage(currentId, result => {
-          dispatch('hideLoading')
-          if(result) {
-            dispatch('initNimSDK', {
-              uid: currentId,
-              sdktoken: storage.get('sdktoken'),
-            })
-          } else {
-            // pageUtil.turnPage('请重新登录', 'login')
-            window.parent.postMessage('backtoHomepage', '*')
-          }
-        })
-      // } else {
-      //   dispatch('initNimSDK', loginInfo)
-      // }
-    } else {
-      dispatch('hideLoading')
-      // 参数里无指定用户
-      if (!loginInfo.uid) {
-        // 无cookie，直接跳转登录页
-        // pageUtil.turnPage('无历史登录记录，请重新登录', 'login')
-        window.parent.postMessage('backtoHomepage', '*')
+    getAppUserInfo((loginName, pwd) => {
+      console.log('loginName: ', loginName);
+      if (!loginInfo.uid || loginInfo.uid !== loginName) {
+        initToDoList(loginName, pwd, onCustomSysMsgs);
       } else {
-        // 有cookie，重新登录
-        dispatch('initNimSDK', loginInfo)
+        const customMsgStr = localStorage.getItem('customSysMsgs') || '[]'
+        const sysMsgStr = localStorage.getItem('sysMsgs') || '[]'
+        const customMsgList = JSON.parse(customMsgStr)
+        const sysMsgList = JSON.parse(sysMsgStr)
+        commit('updateCustomSysMsgs', customMsgList)
+        commit('updateCustomSysMsgUnread', {
+          type: 'reset',
+          unread: customMsgList.filter(msg => msg.unRead).length
+        })
+        commit('updateSysMsgs', sysMsgList)
+        commit('updateSysMsgUnread', {
+          total: sysMsgList.length,
+          addFriend: sysMsgList.filter(msg => (msg.unRead && msg.type === 'addFriend')).length,
+          deleteFriend: sysMsgList.filter(msg => (msg.unRead && msg.type === 'deleteFriend')).length,
+          team: sysMsgList.filter(msg => (msg.unRead && msg.type === 'team')).length
+        })
       }
-    }
+      initLocalStorage(loginName, result => {
+        dispatch('hideLoading')
+        if(result) {
+          dispatch('initNimSDK', {
+            uid: loginName,
+            sdktoken: storage.get('sdktoken'),
+          })
+        } else {
+          // pageUtil.turnPage('请重新登录', 'login')
+          window.parent.postMessage('backtoHomepage', '*')
+        }
+      })
+    });
+    // if (currentId) { // 参数里有指定用户
+    //   console.log('currentId: ', currentId);
+    //   if (!loginInfo.uid || loginInfo.uid !== currentId) {
+    //     initToDoList();
+    //   } 
+    //   initLocalStorage(currentId, result => {
+    //     dispatch('hideLoading')
+    //     if(result) {
+    //       dispatch('initNimSDK', {
+    //         uid: currentId,
+    //         sdktoken: storage.get('sdktoken'),
+    //       })
+    //     } else {
+    //       // pageUtil.turnPage('请重新登录', 'login')
+    //       window.parent.postMessage('backtoHomepage', '*')
+    //     }
+    //   })
+    //   // else {
+    //   //   dispatch('initNimSDK', loginInfo)
+    //   // }
+    // } else { // 参数里无指定用户
+    //   dispatch('hideLoading')
+      
+    //   if (!loginInfo.uid) {
+    //     // 无cookie，直接跳转登录页
+    //     // pageUtil.turnPage('无历史登录记录，请重新登录', 'login')
+    //     window.parent.postMessage('backtoHomepage', '*')
+    //   } else {
+    //     // 有cookie，重新登录
+    //     dispatch('initNimSDK', loginInfo)
+    //   }
+    // }
   }
 }
 

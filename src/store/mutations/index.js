@@ -4,20 +4,21 @@
 import store from '../'
 import cookie from '../../utils/cookie'
 import util from '../../utils'
+import { mergeList } from '../../utils/sysMsg'
 import config from '../../configs'
 import Vue from 'Vue'
 
 export default {
-  updateRefreshState (state) {
+  updateRefreshState(state) {
     state.isRefresh = false
   },
-  updateLoading (state, status) {
+  updateLoading(state, status) {
     clearTimeout(state.loadingTimer)
     state.loadingTimer = setTimeout(() => {
       state.isLoading = status
     }, 20)
   },
-  updateFullscreenImage (state, obj) {
+  updateFullscreenImage(state, obj) {
     obj = obj || {}
     if (obj.src && obj.type === 'show') {
       state.fullscreenImgSrc = obj.src
@@ -27,16 +28,16 @@ export default {
       state.isFullscreenImgShow = false
     }
   },
-  updateUserUID (state, loginInfo) {
+  updateUserUID(state, loginInfo) {
     state.userUID = loginInfo.uid
     state.sdktoken = loginInfo.sdktoken
     cookie.setCookie('uid', loginInfo.uid)
     cookie.setCookie('sdktoken', loginInfo.sdktoken)
   },
-  updateMyInfo (state, myInfo) {
+  updateMyInfo(state, myInfo) {
     state.myInfo = util.mergeObject(state.myInfo, myInfo)
   },
-  updateUserInfo (state, users) {
+  updateUserInfo(state, users) {
     let userInfos = state.userInfos
     users.forEach(user => {
       let account = user.account
@@ -46,13 +47,13 @@ export default {
     })
     state.userInfos = util.mergeObject(state.userInfos, userInfos)
   },
-  updateFriends (state, friends, cutFriends = []) {
+  updateFriends(state, friends, cutFriends = []) {
     const nim = state.nim
     state.friendslist = nim.mergeFriends(state.friendslist, friends)
     // state.friendslist = nim.cutFriends(state.friendslist, cutFriends)
     state.friendslist = nim.cutFriends(state.friendslist, friends.invalid)
   },
-  updateRobots (state, robots) {
+  updateRobots(state, robots) {
     const nim = state.nim
     robots = robots.map(item => {
       if (item.avatar) {
@@ -77,7 +78,7 @@ export default {
       state.robotInfosByNick[robot.nick] = robot
     })
   },
-  updateBlacklist (state, blacks) {
+  updateBlacklist(state, blacks) {
     const nim = state.nim
     state.blacklist = nim.cutFriends(state.blacklist, blacks.invalid)
     let addBlacks = blacks.filter(item => {
@@ -91,7 +92,7 @@ export default {
     // 解除黑名单
     state.blacklist = nim.cutFriends(state.blacklist, remBlacks)
   },
-  updateSearchlist (state, obj) {
+  updateSearchlist(state, obj) {
     const type = obj.type
     switch (type) {
       case 'user':
@@ -110,7 +111,7 @@ export default {
         break
     }
   },
-  updateSessions (state, sessions) {
+  updateSessions(state, sessions) {
     const nim = state.nim
     state.sessionlist = nim.mergeSessions(state.sessionlist, sessions)
     state.sessionlist.sort((a, b) => {
@@ -120,12 +121,12 @@ export default {
       state.sessionMap[item.id] = item
     })
   },
-  deleteSessions (state, sessionIds) {
+  deleteSessions(state, sessionIds) {
     const nim = state.nim
     state.sessionlist = nim.cutSessionsByIds(state.sessionlist, sessionIds)
   },
   // 初始化，收到离线漫游消息时调用
-  updateMsgs (state, msgs) {
+  updateMsgs(state, msgs) {
     const nim = state.nim
     let tempSessionMap = {}
     msgs.forEach(msg => {
@@ -162,7 +163,7 @@ export default {
     }
   },
   // 更新追加消息，追加一条消息
-  putMsg (state, msg) {
+  putMsg(state, msg) {
     let sessionId = msg.sessionId
     if (!state.msgs[sessionId]) {
       state.msgs[sessionId] = []
@@ -183,7 +184,7 @@ export default {
     }
   },
   // 删除消息列表消息
-  deleteMsg (state, msg) {
+  deleteMsg(state, msg) {
     let sessionId = msg.sessionId
     let tempMsgs = state.msgs[sessionId]
     if (!tempMsgs || tempMsgs.length === 0) {
@@ -199,8 +200,8 @@ export default {
     }
   },
   // 替换消息列表消息，如消息撤回
-  replaceMsg (state, obj) {
-    let {sessionId, idClient, msg} = obj
+  replaceMsg(state, obj) {
+    let { sessionId, idClient, msg } = obj
     let tempMsgs = state.msgs[sessionId]
     if (!tempMsgs || tempMsgs.length === 0) {
       return
@@ -216,7 +217,7 @@ export default {
     }
   },
   // 用idClient 更新消息，目前用于消息撤回
-  updateMsgByIdClient (state, msgs) {
+  updateMsgByIdClient(state, msgs) {
     if (!Array.isArray(msgs)) {
       msgs = [msgs]
     }
@@ -229,7 +230,7 @@ export default {
     })
   },
   // 更新当前会话id，用于唯一判定是否在current session状态
-  updateCurrSessionId (state, obj) {
+  updateCurrSessionId(state, obj) {
     let type = obj.type || ''
     if (type === 'destroy') {
       state.currSessionId = null
@@ -241,7 +242,7 @@ export default {
   },
   // 更新当前会话列表的聊天记录，包括历史消息、单聊消息等，不包括聊天室消息
   // replace: 替换idClient的消息
-  updateCurrSessionMsgs (state, obj) {
+  updateCurrSessionMsgs(state, obj) {
     let type = obj.type || ''
     if (type === 'destroy') { // 清空会话消息
       state.currSessionMsgs = []
@@ -285,7 +286,7 @@ export default {
       if (lenCurrMsgs > 0) {
         lastMsgTime = state.currSessionMsgs[lenCurrMsgs - 1].time
       }
-      if (newMsg) { 
+      if (newMsg) {
         if ((newMsg.time - lastMsgTime) > 1000 * 60 * 5) {
           state.currSessionMsgs.push({
             type: 'timeTag',
@@ -330,7 +331,7 @@ export default {
       }
     }
   },
-  updateSysMsgs (state, sysMsgs) {
+  updateSysMsgs(state, sysMsgs) {
     const nim = state.nim
     if (!Array.isArray(sysMsgs)) {
       sysMsgs = [sysMsgs]
@@ -339,12 +340,18 @@ export default {
       msg.showTime = util.formatDate(msg.time, false)
       return msg
     })
-    // state.sysMsgs = nim.mergeSysMsgs(state.sysMsgs, sysMsgs)
-    state.sysMsgs = [].concat(nim.mergeSysMsgs(state.sysMsgs, sysMsgs))
-    Vue.set(state, sysMsgs, state.sysMsgs)
+    sysMsgs = mergeList(sysMsgs, state.sysMsgs);
+    localStorage.setItem('sysMsgs', JSON.stringify(sysMsgs))
+    Vue.set(state, 'sysMsgs', sysMsgs)
+    store.commit('updateSysMsgUnread', {
+      total: sysMsgs.length,
+      addFriend: sysMsgs.filter(msg => (msg.unRead && msg.type === 'addFriend')).length,
+      deleteFriend: sysMsgs.filter(msg => (msg.unRead && msg.type === 'deleteFriend')).length,
+      team: sysMsgs.filter(msg => (msg.unRead && msg.type === 'team')).length
+    })
   },
   // 更新消息的状态，如管理员批准或拒绝入群后，会收到新消息，更新入群申请的状态
-  updateSysMsgState (state, sysMsg) {
+  updateSysMsgState(state, sysMsg) {
     let exitMsg = state.sysMsgs.find(msg => {
       return msg.idServer === sysMsg.idServer
     })
@@ -352,27 +359,31 @@ export default {
       exitMsg.state = sysMsg.state
     }
   },
-  updateSysMsgUnread (state, obj) {
+  updateSysMsgUnread(state, obj) {
     state.sysMsgUnread = Object.assign({}, obj)
   },
-  updateCustomSysMsgs (state, sysMsgs) {
+  updateCustomSysMsgs(state, sysMsgs) {
     const nim = state.nim
     if (!Array.isArray(sysMsgs)) {
       sysMsgs = [sysMsgs]
     }
+    console.log(sysMsgs);
     sysMsgs = sysMsgs.map(msg => {
       msg.showTime = util.formatDate(msg.time, false)
+      // 默认为未读
+      typeof msg.unRead === 'undefined' && (msg.unRead = true);
       return msg
     })
-    state.customSysMsgs = nim.mergeSysMsgs(state.customSysMsgs, sysMsgs)
-    Vue.set(state, sysMsgs, state.customSysMsgs)
+    sysMsgs = mergeList(sysMsgs, state.customSysMsgs);
+    localStorage.setItem('customSysMsgs', JSON.stringify(sysMsgs))
+    Vue.set(state, 'customSysMsgs', sysMsgs)
     store.commit('updateCustomSysMsgUnread', {
-      type: 'add',
-      unread: sysMsgs.length
+      type: 'reset',
+      unread: sysMsgs.filter(msg => msg.unRead).length
     })
   },
-  updateCustomSysMsgUnread (state, obj) {
-    let {type, unread} = obj
+  updateCustomSysMsgUnread(state, obj) {
+    let { type, unread } = obj
     switch (type) {
       case 'reset':
         state.customSysMsgUnread = unread || 0
@@ -382,7 +393,7 @@ export default {
         break
     }
   },
-  resetSysMsgs (state, obj) {
+  resetSysMsgs(state, obj) {
     let type = obj.type
     switch (type) {
       case 0:
@@ -399,11 +410,11 @@ export default {
         break
     }
   },
-  deleteSysMsgs (state, obj) {
+  deleteSysMsgs(state, obj) {
     let type = obj.type
     let idServer = obj.idServer
-    let arr = type===1 ? state.sysMsgs : state.customSysMsgs
-    arr = arr.filter(msg=>{
+    let arr = type === 1 ? state.sysMsgs : state.customSysMsgs
+    arr = arr.filter(msg => {
       return msg.idServer !== idServer
     })
     if (type === 1) {
@@ -412,28 +423,28 @@ export default {
       Vue.set(state, 'customSysMsgs', arr)
     }
   },
-  setNoMoreHistoryMsgs (state) {
+  setNoMoreHistoryMsgs(state) {
     state.noMoreHistoryMsgs = true
   },
-  resetNoMoreHistoryMsgs (state) {
+  resetNoMoreHistoryMsgs(state) {
     state.noMoreHistoryMsgs = false
   },
   // 继续与机器人会话交互
-  continueRobotMsg (state, robotAccid) {
+  continueRobotMsg(state, robotAccid) {
     state.continueRobotAccid = robotAccid
   },
 
-  initChatroomInfos (state, obj) {
+  initChatroomInfos(state, obj) {
     state.chatroomInfos = obj
   },
-  setCurrChatroom (state, chatroomId) {
+  setCurrChatroom(state, chatroomId) {
     state.currChatroomId = chatroomId
     state.currChatroom = state.chatroomInsts[chatroomId]
     state.currChatroomMsgs = []
     state.currChatroomInfo = {}
     state.currChatroomMembers = []
   },
-  resetCurrChatroom (state) {
+  resetCurrChatroom(state) {
     state.currChatroomId = null
     state.currChatroom = null
     state.currChatroomMsgs = []
@@ -441,11 +452,11 @@ export default {
     state.currChatroomMembers = []
   },
   // 聊天室相关逻辑
-  updateChatroomInfo (state, obj) {
+  updateChatroomInfo(state, obj) {
     state.currChatroomInfo = Object.assign(state.currChatroomInfo, obj)
   },
-  updateCurrChatroomMsgs (state, obj) {
-    let {type, msgs} = Object.assign({}, obj)
+  updateCurrChatroomMsgs(state, obj) {
+    let { type, msgs } = Object.assign({}, obj)
     if (type === 'put') {
       msgs.forEach(msg => {
         let chatroomId = msg.chatroomId
@@ -467,11 +478,11 @@ export default {
       }
     }
   },
-  getChatroomInfo (state, obj) {
+  getChatroomInfo(state, obj) {
     state.currChatroomInfo = obj
   },
-  updateChatroomMembers (state, obj) {
-    let {type, members} = obj
+  updateChatroomMembers(state, obj) {
+    let { type, members } = obj
     if (type === 'destroy') {
       state.currChatroomMembers = []
     } else if (type === 'put') {
@@ -482,12 +493,12 @@ export default {
       })
     }
   },
-  updateTeamList (state, teams) {
+  updateTeamList(state, teams) {
     const nim = state.nim
     store.state.teamlist = nim.mergeTeams(store.state.teamlist, teams)
     store.state.teamlist = nim.cutTeams(store.state.teamlist, teams.invalid)
   },
-  updateTeamMembers (state, obj) {
+  updateTeamMembers(state, obj) {
     const nim = state.nim
     var teamId = obj.teamId
     var members = obj.members
@@ -510,8 +521,8 @@ export default {
     var teamId = obj.teamId
     var invalidAccounts = obj.accounts
     if (state.teamMembers[teamId] === undefined) return
-    state.teamMembers[teamId] = state.teamMembers[teamId].filter((member, index)=>{
-      return invalidAccounts.indexOf(member.account)===-1
+    state.teamMembers[teamId] = state.teamMembers[teamId].filter((member, index) => {
+      return invalidAccounts.indexOf(member.account) === -1
     })
     state.teamMembers = Object.assign({}, state.teamMembers)
   },
@@ -528,7 +539,7 @@ export default {
     state.teamSettingConfig = obj
   },
   updateSentReceipedMap(state, obj) {
-    if (!obj || obj.length<1) {
+    if (!obj || obj.length < 1) {
       return
     }
     var teamId = obj[0].teamId
@@ -544,16 +555,16 @@ export default {
       state.currReceiptQueryTeamId = obj.teamId
     }
     var needQuery = obj.msgs
-    .filter(msg => 
-      msg.needMsgReceipt && msg.from === state.myInfo.account &&  !state.receiptQueryList.find(item => item.idServer === msg.idServer)
-    )
-    .map(msg => {
-      return {
-        teamId: obj.teamId,
-        idServer: msg.idServer
-      }
-    })
-    if (needQuery.length>0) {
+      .filter(msg =>
+        msg.needMsgReceipt && msg.from === state.myInfo.account && !state.receiptQueryList.find(item => item.idServer === msg.idServer)
+      )
+      .map(msg => {
+        return {
+          teamId: obj.teamId,
+          idServer: msg.idServer
+        }
+      })
+    if (needQuery.length > 0) {
       state.receiptQueryList.push(...needQuery)
     }
     if (needQuery.length > 0) {
@@ -580,6 +591,6 @@ export default {
   },
   initMsgReceiptDetail(state, obj) {
     state.teamMsgReadsDetail.readAccounts = obj.readAccounts
-    state.teamMsgReadsDetail.unreadAccounts =  obj.unreadAccounts
+    state.teamMsgReadsDetail.unreadAccounts = obj.unreadAccounts
   },
 }

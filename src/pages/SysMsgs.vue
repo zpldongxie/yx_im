@@ -49,8 +49,9 @@
             :idServer ="msg.idServer"
             v-touch:swipeleft="showDelBtn"
             v-touch:swiperight="hideDelBtn"
+            @click.native="yjzdMsg(msg)"
           >
-            <img v-if="sysType===0" class="icon" style="width: 2em; height: 1.4em;" slot="icon" :src="msg.unRead ? clIcon: yclIcon" @click="yjzdMsg(msg)" />
+            <img v-if="sysType===0" class="icon" style="width: 2em; height: 1.4em;" slot="icon" :src="msg.unRead ? clIcon: yclIcon" />
             <img v-if="sysType===1" class="icon" slot="icon" width="24" :src="msg.avatar">
             <span class="u-tag-del" :class="{active: deleteIdServer === msg.idServer}" @click="deleteMsg(msg.idServer)"></span>
           </cell>
@@ -64,22 +65,15 @@
 <script>
 import config from '../configs'
 
-/**
- * 去重合并
- */
-const mergeList = (arr1, arr2) => {
-  const newArr2 = arr2.filter((item) => !arr1.find((item1) => item1.idServer === item.idServer));
-  return arr1.concat(newArr2);
-}
 export default {
   // 进入该页面，文档被挂载
   mounted () {
-    this.$store.dispatch('markSysMsgRead')
-    this.$store.dispatch('markCustomSysMsgRead')
+    // this.$store.dispatch('markSysMsgRead')
+    // this.$store.dispatch('markCustomSysMsgRead')
   },
   updated () {
-    this.$store.dispatch('markSysMsgRead')
-    this.$store.dispatch('markCustomSysMsgRead')
+    // this.$store.dispatch('markSysMsgRead')
+    // this.$store.dispatch('markCustomSysMsgRead')
   },
   data () {
     return {
@@ -104,40 +98,34 @@ export default {
       }
       // 获取新消息
       let sysMsgs = this.$store.state.sysMsgs.filter(msg => {
+        const op = this.userInfos[msg.from]
         switch (msg.type) {
           case 'addFriend':
-            msg.showText = `${msg.friend.alias || msg.friend.account} 添加您为好友~`
-            const addAvatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? this.userInfos[msg.from].avatar : ''
-            msg.avatar = addAvatar
+            msg.showText = `${op && op.nick ? op.nick + '(' + msg.friend.account + ')' : msg.friend.account} 添加您为好友~`
+            msg.avatar = op && op.avatar || this.defaultAvatar
             return true
           case 'deleteFriend':
-            msg.showText = `${msg.from} 将您从好友中删除`
-            const showAvatar = this.userInfos[msg.from].avatar || this.defaultAvatar
-            msg.avatar = showAvatar
+            msg.showText = `${op && op.nick ? op.nick + '('+ msg.from + ')' : msg.from} 将您从好友中删除`
+            msg.avatar = op && op.avatar || this.defaultAvatar
             return true
           case 'applyTeam':
             msg.showText = msg.from
-            const applyAvatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? this.userInfos[msg.from].avatar : this.defaultAvatar
-            msg.avatar = applyAvatar
+            msg.avatar = op && op.avatar || this.defaultAvatar
             msg.desc = `申请加入群:${this.getTeamName(msg.to)}`
             return true
           case 'teamInvite':
             msg.showText = msg.attach.team.name
-            const teamavatar = this.userInfos[msg.from] && this.userInfos[msg.from].avatar ? this.userInfos[msg.from].avatar : this.defaultAvatar
-            msg.avatar =  teamavatar
+            msg.avatar =  op && op.avatar || this.defaultAvatar
             msg.desc = `邀请你加入群${msg.to}`
             return true
           case 'rejectTeamApply':
             msg.showText = msg.attach.team.name
             msg.desc ='管理员拒绝你加入本群'
-            const rejectavatar = msg.attach.team.avatar ? msg.attach.team.avatar : this.defaultAvatar
-            msg.avatar = rejectavatar
+            msg.avatar = msg.attach.team && msg.attach.team.avatar || this.defaultAvatar
             return true
           case 'rejectTeamInvite':
-            let op = this.userInfos[msg.from]
             msg.showText = op.nick
-            const inviteavatar = op.avatar ? op.avatar : this.defaultAvatar
-            msg.avatar = inviteavatar
+            msg.avatar = op && op.avatar || this.defaultAvatar
             msg.desc = `${op.nick}拒绝了群${this.getTeamName(msg.to)}的入群邀请`
             return true
         }
@@ -147,52 +135,22 @@ export default {
         // 最新的排在前
         return msg2.time - msg1.time
       })
-      const storage = localStorage.getItem("sysMsgs");
-      let newStorage = storage ? JSON.parse(storage) : [];
-      if (sysMsgs.length>0) {
-        // newStorage = newStorage.concat(sysMsgs);
-        newStorage = mergeList(sysMsgs, newStorage);
-        console.log('newStorage',newStorage);
-        localStorage.setItem("sysMsgs",JSON.stringify(newStorage))
-      }
-      // let localSysMsgs =JSON.parse(localStorage.getItem("sysMsgs")) 
-      return newStorage || []
+      return sysMsgs || []
     },
     customSysMsgs () {
-       // 同步本地存储
-      let yspid = localStorage.getItem('yspid');
-      let uid = localStorage.getItem('uid');
-      if (!yspid || yspid !== uid) {
-        localStorage.removeItem('customSysMsgs');
-        localStorage.setItem('yspid', uid);
-      }
-
       let customSysMsgs = this.$store.state.customSysMsgs.filter(msg => {
         if (msg.scene === 'p2p') {
           let content = JSON.parse(msg.content)
           msg.showText = `${content.content}`
           const fromUser = fromUser || {};
-          // 头像
-          const avatar = fromUser.avatar 
-                          ? config.managerUrl + fromUser.avatar.replace('http://', '').replace('default-icon.png', 'notice-icon.png').split('?')[0]
-                          : this.defaultAvatar
-          msg.avatar = avatar
           // 附加信息
           const {pushPayload = '{}'} = msg
-          msg.payload = JSON.parse(pushPayload)
+          msg.payload = msg.payload || JSON.parse(pushPayload)
           return msg
         }
         return false
       })
-      const custom = localStorage.getItem("customSysMsgs");
-      let newCustomSysMsgs = custom ? JSON.parse(custom) : [];
-      if (customSysMsgs.length>0) {
-        // newCustomSysMsgs = newCustomSysMsgs.concat(customSysMsgs);
-        newCustomSysMsgs = mergeList(customSysMsgs, newCustomSysMsgs);
-        localStorage.setItem("customSysMsgs",JSON.stringify(newCustomSysMsgs))
-      }
-      // let localCustomSysMsgs =JSON.parse(localStorage.getItem("customSysMsgs")); 
-      return newCustomSysMsgs || []
+      return customSysMsgs || []
     },
     msgList() {
       if (this.sysType ===  1) {
@@ -227,7 +185,7 @@ export default {
       }
     },
     deleteMsg(idServer){
-      if(that.sysType == 1){
+      if(this.sysType == 1){
         const list = this.sysMsgs; // JSON.parse(localStorage.getItem('sysMsgs') || []);
         const newList = list.filter((item) => item.idServer !== idServer);
         localStorage.setItem('sysMsgs', newList);
@@ -312,8 +270,8 @@ export default {
       return false
     },
     yjzdMsg (msg) {  // 一键直达
+      console.log('into yjzdMsg');
       const {
-        idServer,
         unRead,
         payload: {
           XXID,JSR,LCID,LYXT,TASKTYPE
@@ -324,7 +282,7 @@ export default {
       }
       // msg.payload.XXID, msg.payload.JSR, msg.payload.LCID, msg.payload.LYXT, msg.payload.TASKTYPE
       // 更新已读状态
-      const current = this.customSysMsgs.find(cmsg => cmsg.idServer === idServer)
+      const current = this.customSysMsgs.find(cmsg => cmsg.payload.XXID === XXID)
       current.unRead = false
       this.$store.commit('updateCustomSysMsgs', this.customSysMsgs)
       this.postMessage(this.allUnread);
@@ -349,14 +307,14 @@ export default {
           newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_pxb.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID + '&BJ=' + LYXT
           break
         case 'PXBGLBM': // 培训班报名
-          window.open(process.env.VUE_APP_newLC_URL + '/fh-system/admin/casCheck?redirectUrl=/pxbgl/pxbbm/pxbbm_list.html')
+          newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/pxbgl/pxbbm/pxbbm_list.html'
           break
         case 'XSHDSH': // 线上大学生活动
         case 'XSHDSQ':
-          window.open(process.env.VUE_APP_newLC_URL + '/fh-system/admin/casCheck?redirectUrl=/message_station_xsdxshd.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID + '&BJ=' + LYXT)
+          newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/message_station_xsdxshd.html&XXID=' + XXID + '&JSR=' + JSR + '&LCID=' + LCID + '&BJ=' + LYXT
           break
         case 'XSHDBM': // 线上大学生活动报名
-          window.open(process.env.VUE_APP_newLC_URL + '/fh-system/admin/casCheck?redirectUrl=/xsdxshd/hdbm/hdbm_list.html')
+          newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/xsdxshd/hdbm/hdbm_list.html'
           break
         case 'PY': // 普元
           newUrl = 'http://' + process.env.VUE_APP_PUYUAN_URL + '/default/commom/login/messageurl.jsp?tyxtlb=xjmhMessages&wkItemID=' + LCID + '@' + TASKTYPE
