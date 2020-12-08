@@ -317,23 +317,24 @@ export default {
           newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/xsdxshd/hdbm/hdbm_list.html'
           break
         case 'PY': // 普元
-          newUrl = 'http://' + process.env.VUE_APP_PUYUAN_URL + '/default/commom/login/messageurl.jsp?tyxtlb=xjmhMessages&wkItemID=' + LCID + '@' + TASKTYPE
+          newUrl = 'http://59.75.39.29/default/commom/login/messageurl.jsp?tyxtlb=xjmhMessages&wkItemID=' + LCID + '@' + TASKTYPE
           break
       }
       if (newUrl) {
         const postData = LYXT == 'PY' ? {
           method: 'openUrl',
           payload: {
-            id: "ad9930e4-728c-4c2f-8b44-cc4b0fba591a",
+            id: "80d74de8-373d-4bc3-98f4-b3e72eb25542",
             type: 2,
             address: newUrl,
-            name: '个人数据中心',
-            packageUrl: 'http://59.75.39.25/files/applications/5f1fdadb4bc860135ece13a6/t4u95bwn1oe.pam',
-            logoUrl: '',
+            name: '待办工作',
+            packageUrl: 'http://59.75.39.25/files/applications/5f1fdadb4bc860135ece13a6/5wjmbijs3a6.pma',
+            logoUrl: '/files/appiconlogos/5f1fdadb4bc860135ece13a6/a8a0zfvf1s.png',
             description: '',
             isVisible: true,
-            isMarketApplication: false
+            isMarketApplication: 0
           }
+          // address: "http://59.75.39.29/default/commom/index/xijing_Entrance.jsp____ToDoWork"
         } : {
           method: 'openUrl',
           payload: {
@@ -342,10 +343,10 @@ export default {
             address: newUrl
           }
         };
-        if (LYXT === 'PY') {
-          alert('旧系统消息请在PC端进行处理')
-          return;
-        }
+        // if (LYXT === 'PY') {
+        //   alert('旧系统消息请在PC端进行处理')
+        //   return;
+        // }
 
         if (window.parent && window.parent !== window) {
           window.parent.postMessage(JSON.stringify(postData), '*')

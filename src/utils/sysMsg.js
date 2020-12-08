@@ -2,7 +2,7 @@
  * @description: 消息工具类
  * @author: zpl
  * @Date: 2020-12-08 10:09:51
- * @LastEditTime: 2020-12-08 14:21:48
+ * @LastEditTime: 2020-12-08 20:08:08
  * @LastEditors: zpl
  */
 
@@ -32,11 +32,11 @@
     }
   });
   // TODO: 暂时过滤掉旧流程
-  const returnList = newList.filter(msg => {
-    if (typeof msg.payload === 'undefined') {
-      return true;
-    }
-    return msg.payload.LYXT !== 'PY'
-  });
-  return returnList;
+  // const returnList = newList.filter(msg => {
+  //   if (typeof msg.payload === 'undefined') {
+  //     return true;
+  //   }
+  //   return msg.payload.LYXT !== 'PY'
+  // });
+  return newList;
 }
