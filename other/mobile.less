@@ -116,7 +116,7 @@
             border-top: none;
             &.left-menu-active {
               border-bottom: 2px solid #08afb2;
-              background: transparent;
+              background: none;
               span {
                 color: #08afb2;
               }
@@ -270,11 +270,13 @@
               .book-search-con {
                 text-align: center;
                 .search-text{
-                  margin-right: 18px;
+                  width:80px;
+                }
+                .search-date {
+                  width: 270px;
                 }
                 .search-date,.el-input{
-                  margin-right: 0;
-                  width:  calc(~'100% - 75px');
+                  width:  calc(~'100% - 110px');
                 }
               }
               button {
@@ -556,7 +558,7 @@
                   margin-right: 18px;
                 }
                 .el-select{
-                  width: calc(~'100% - 75px');
+                  width: calc(~'100% - 80px');
                 }
               }
             }
@@ -616,7 +618,7 @@
             div[class*="el-collapse-item__header"] {
               line-height: 45px;
               margin: 0 0 10px;
-              padding: 10px 10px 10px 20px;
+              padding: 10px;
               box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.05),
                 0px -1px 1px 1px rgba(0, 0, 0, 0.05);
               > div {
@@ -690,23 +692,27 @@
             background-color: inherit;
             .xxcj-list-top {
               .list-search-con {
+                div:nth-child(2){
+                  display: flex;
+                }
                 text-align: center;
                 .search-date{
                   width: calc(~'100% - 75px');
                   margin-right: 0;
                 }
-                .carry-fl{
-                  .search-text{
-                    margin-right: 18px;
-                  }
+                .search-text {
+                  width: 100px;
+                  margin-right: 0px;
+                  text-align: left;
                 }
                 .listName {
                   display: flex;
-                  margin: 15px 0;    
+                  margin: 15px 0;
                   .el-input {
                     width: calc(~'100% - 75px')!important;
                     margin-right: 0;
-                  }              
+                  }
+                  
                 }
                 .el-button {
                   margin-top: 20px;
@@ -733,7 +739,7 @@
 
     .el-popper[x-placement^="top"],
     el-picker-panel__body-wrapper {
-      width: 95vw;
+      width: 40vw;
       left: 10px !important;
     }
     .el-popper[x-placement^="bottom"] {
@@ -742,7 +748,6 @@
       width: 95vw !important;
       overflow: hidden;
     }
-
     .el-picker-panel [slot="sidebar"],
     .el-picker-panel__sidebar {
       bottom: auto;
