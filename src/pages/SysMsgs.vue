@@ -277,9 +277,9 @@ export default {
           XXID,JSR,LCID,LYXT,TASKTYPE
         }
       } = msg
-      if (!unRead) {
-        return false;
-      }
+      // if (!unRead) {
+      //   return false;
+      // }
       // msg.payload.XXID, msg.payload.JSR, msg.payload.LCID, msg.payload.LYXT, msg.payload.TASKTYPE
       // 更新已读状态
       const current = this.customSysMsgs.find(cmsg => cmsg.payload.XXID === XXID)
