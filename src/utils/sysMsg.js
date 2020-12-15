@@ -2,33 +2,48 @@
  * @description: 消息工具类
  * @author: zpl
  * @Date: 2020-12-08 10:09:51
- * @LastEditTime: 2020-12-08 20:08:08
+ * @LastEditTime: 2020-12-10 17:57:12
  * @LastEditors: zpl
  */
 
- /**
-  * 去重合并，数组1在上，数组2在下
-  *
-  * @param {*} arr1
-  * @param {*} arr2
-  * @returns
-  */
- export const mergeList = (arr1, arr2) => {
-  const newArr2 = arr2.filter((item) => {
-    const finded = arr1.find((item1) => {
-      const idServerSame = (typeof item.idServer !== 'undefined' && typeof item1.idServer !== 'undefined') ? item.idServer === item1.idServer : false
-      const xxidSame = (item1.payload && item.payload) ? item1.payload.XXID === item.payload.XXID : false;
-      return idServerSame || xxidSame
+/**
+ * 去重合并，数组1在上，数组2在下
+ *
+ * @param {*} arr1
+ * @param {*} arr2
+ * @returns
+ */
+export const mergeList = (arr1, arr2) => {
+  try {
+    arr1.forEach(msg => {
+      if (typeof msg.idServer === 'undefined') {
+        msg.idServer = msg.payload
+          ? msg.payload.LCID
+          : msg.pushPayload
+            ? JSON.parse(msg.pushPayload).LCID
+            : new Date().getTime()
+      }
     });
+    arr2.forEach(msg => {
+      if (typeof msg.idServer === 'undefined') {
+        msg.idServer = msg.payload
+          ? msg.payload.LCID
+          : msg.pushPayload
+            ? JSON.parse(msg.pushPayload).LCID
+            : new Date().getTime()
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  const newList = arr1.concat(arr2);
+  const returnList = [];
+  newList.forEach(item => {
+    const finded = returnList.find(t => t.idServer === item.idServer);
     if (finded && !finded.unRead) {
       item.unRead = false;
-    }
-    return !finded;
-  });
-  const newList = arr1.concat(newArr2);
-  newList.forEach(msg => {
-    if (typeof msg.idServer === 'undefined') {
-      msg.idServer = msg.payload && msg.payload.XXID || new Date().getTime()
+    } else {
+      returnList.push(item);
     }
   });
   // TODO: 暂时过滤掉旧流程
@@ -38,5 +53,5 @@
   //   }
   //   return msg.payload.LYXT !== 'PY'
   // });
-  return newList;
+  return returnList;
 }

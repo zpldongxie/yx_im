@@ -316,6 +316,8 @@ export default {
         case 'XSHDBM': // 线上大学生活动报名
           newUrl = config.pcHost + '/fh-system/admin/casCheck?redirectUrl=/xsdxshd/hdbm/hdbm_list.html'
           break
+        case 'CXCYDC': // 创新创业的督促消息，只是更改状态，不做跳转
+          break
         case 'PY': // 普元
           newUrl = 'http://59.75.39.29/default/commom/login/messageurl.jsp?tyxtlb=xjmhMessages&wkItemID=' + LCID + '@' + TASKTYPE
           break
