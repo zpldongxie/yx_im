@@ -27,13 +27,13 @@
 
       <h3>云信IM</h3>
       <hr />
-      <input id="jsr" type="text" value="20040028" />
+      <input id="jsr" type="text" value="20070027" />
       <button id="sendAttachMsg">发送测试通知</button>
     </div>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
       // 配置信息
-      var IDP_HOST = "http://59.75.39.25:30081/";
+      var IDP_HOST = "http://59.75.39.25:30081";
       var companyName = "xjxy";
 
       // 测试数据
@@ -99,7 +99,7 @@
        */
       function updateDev(devInfo = testDepartment) {
         sendAjax({
-          url: IDP_HOST + companyName + "/userData/update",
+          url: IDP_HOST + '/' + companyName + "/userData/update",
           data: JSON.stringify({
             dep: [devInfo],
           }),
@@ -116,7 +116,7 @@
        */
       function updateUser(userInfo = testUser) {
         sendAjax({
-          url: IDP_HOST + companyName + "/userData/update",
+          url: IDP_HOST + '/' + companyName + "/userData/update",
           data: JSON.stringify({
             user: [userInfo],
           }),
@@ -134,7 +134,7 @@
       function delDev(department_id = testDepartment.id) {
         sendAjax({
           type: "delete",
-          url: IDP_HOST + companyName + "/userData/del",
+          url: IDP_HOST + '/' + companyName + "/userData/del",
           data: JSON.stringify({
             department_id: department_id,
           }),
@@ -152,7 +152,7 @@
       function delUser(user_id = testUser.user_id) {
         sendAjax({
           type: "delete",
-          url: IDP_HOST + companyName + "/userData/del",
+          url: IDP_HOST + '/' + companyName + "/userData/del",
           data: JSON.stringify({
             user_id: user_id,
           }),
@@ -168,7 +168,7 @@
        */
       function calcDev() {
         sendAjax({
-          url: IDP_HOST + companyName + "/calcdepartmentid",
+          url: IDP_HOST + '/' + companyName + "/calcdepartmentid",
           okAction: function (result) {
             console.log(result);
           },
@@ -181,7 +181,7 @@
        */
       function uploadAppStrategy() {
         sendAjax({
-          url: IDP_HOST + companyName + "/uploadAppStrategy",
+          url: IDP_HOST + '/' + companyName + "/uploadAppStrategy",
           data: JSON.stringify(testRule),
           okAction: function (result) {
             console.log(result);
@@ -207,15 +207,14 @@
               LYXT: "XLC",
               attach: "您的开具介绍信申请（教师）待提交;",
             };
-            $.post(
-              IDP_HOST + "/xjxy/api/sendAttachMsg",
-              testData,
-              function (data, status) {
+            sendAjax({
+              url: IDP_HOST + '/' + companyName + "/api/sendAttachMsg",
+              data: JSON.stringify(testData),
+              okAction: function (result) {
                 // alert("数据: \n" + data + "\n状态: " + status);
-                console.log("状态: " + status);
-                console.log("数据: " + data);
+                console.log(result);
               }
-            );
+            })
           });
       }
     </script>
