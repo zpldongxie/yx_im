@@ -40,8 +40,8 @@ export const mergeList = (arr1, arr2) => {
   const returnList = [];
   newList.forEach(item => {
     const finded = returnList.find(t => t.idServer === item.idServer);
-    if (finded && !finded.unRead) {
-      item.unRead = false;
+    if (finded) {
+      if (!finded.unRead) { item.unRead = false; }
     } else {
       returnList.push(item);
     }
