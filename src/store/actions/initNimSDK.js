@@ -56,8 +56,9 @@ export function initNimSDK ({ state, commit, dispatch }, loginInfo) {
       if(event.message && event.message === '超时') {
         location.reload();
       } else {
-        alert('网络连接状态异常')
-        location.href = config.loginUrl
+        location.reload();
+        // alert('网络连接状态异常')
+        // location.href = config.loginUrl
       }
     },
     onwillreconnect: function onWillReconnect () {
