@@ -274,7 +274,7 @@ export default {
       const {
         unRead,
         payload: {
-          XXID,JSR,LCID,LYXT,TASKTYPE
+          XXID,JSR,LCID,LYXT,TASKTYPE,XTURL
         }
       } = msg
       // if (!unRead) {
@@ -321,6 +321,11 @@ export default {
         case 'PY': // 普元
           newUrl = 'http://59.75.39.29/default/commom/login/messageurl.jsp?tyxtlb=xjmhMessages&wkItemID=' + LCID + '@' + TASKTYPE
           break
+        case 'OA': // OA
+          // TODO: 待与OA对接
+          break;
+        default: // 调查问卷等其他直接打开地址的应用
+          newUrl = XTURL;
       }
       if (newUrl) {
         const postData = LYXT == 'PY' ? {

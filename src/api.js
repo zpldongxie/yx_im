@@ -113,7 +113,7 @@ const initToDoList = async (loginName, pwd, callback) => {
       isPushable: true,
       isUnreadable: true,
       needPushNick: false,
-      payload: {LCID: msg.LCID, XXID: msg.XXID, JSR: msg.JSR, LYXT: msg.LYXT, TASKTYPE: msg.TASKTYPE},
+      payload: {LCID: msg.LCID, XXID: msg.XXID, JSR: msg.JSR, LYXT: msg.LYXT, TASKTYPE: msg.TASKTYPE, XTURL: msg.XTURL},
       scene: "p2p",
       sendToOnlineUsersOnly: true,
       showText: msg.CZNR, //"您的开具介绍信申请（教师）待提交;",
