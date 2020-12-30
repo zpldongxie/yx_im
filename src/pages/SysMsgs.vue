@@ -323,6 +323,7 @@ export default {
           break
         case 'OA': // OA
           // TODO: 待与OA对接
+          window.open(XTURL);
           break;
         default: // 调查问卷等其他直接打开地址的应用
           newUrl = XTURL;
